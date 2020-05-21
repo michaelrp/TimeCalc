@@ -21,7 +21,7 @@
             "request": "launch",
             "timeout": 30000,
             // If you have changed the default port / launch URL make sure to update the expectation below
-            "url": "https://localhost:5001",
+            "url": "http://localhost:5000",
             "webRoot": "${workspaceFolder}/TimeCalc",
             "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}"
         }
