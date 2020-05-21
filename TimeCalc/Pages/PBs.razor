@@ -1,0 +1,83 @@
+@page "/pbs"
+@using TimeCalc.Components
+@using TimeCalc.Models
+@inject HttpClient Http
+
+<h4>Personal Bests</h4>
+
+<form>
+    @if(personalBests != null && personalBests.Count > 0)
+    {
+        <div class="form-row mb-1">
+            <div class="col-4 text-center">Puzzle</div>
+            <div class="col-4 text-center">Single</div>
+            <div class="col-4 text-center">Average</div>
+        </div>
+        foreach(var pb in personalBests)
+        {
+            <PB PersonalBest="@pb" PersonalBestChanged="@OnPersonalBestChanged" />
+        }
+    }
+    else
+    {
+        <div class="form-row">
+            <h5 class="col-12 mb-3">No personal bests</h5>
+        </div>
+    }
+
+    <div class="form-row">
+        <div class="col-4">
+            <button type="button" class="btn btn-primary" @onclick="OnAddPersonalBest">
+                Add
+            </button>
+        </div>
+        <div class="col-8">
+            <div class="input-group">
+                <input type="text" class="form-control" value="@wcaId" @oninput="OnWcaIdChanged" placeholder="WCA ID">
+                <div class="input-group-append">
+                <button class="btn btn-primary" type="button" @onclick="LoadFromWca">
+                    Load
+                </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    private List<PersonalBest> personalBests = new List<PersonalBest>();
+    private string wcaId = "";
+    private string name = "";
+    private string avatarUrl = "";
+    private bool isLoading = false;
+
+    private async Task OnPersonalBestChanged(PersonalBest personalBest)
+    {
+        Console.WriteLine("OnPersonalBestChanged", personalBest);
+    }
+
+    private async Task OnWcaIdChanged(ChangeEventArgs e)
+    {
+        wcaId = e.Value.ToString();
+        Console.WriteLine("OnWcaIdChanged", wcaId);
+    }
+
+    private async Task OnAddPersonalBest()
+    {
+
+    }
+
+    private async Task LoadFromWca()
+    {
+        isLoading = true;
+
+        var url = $"sample-data/{wcaId}.json";
+        var results = await Http.GetFromJsonAsync<PersonalBestResults>(url);
+
+        name = results.Name;
+        avatarUrl = results.AvatarUrl;
+        personalBests = results.PersonalBests;
+
+        isLoading = false;
+    }
+}
