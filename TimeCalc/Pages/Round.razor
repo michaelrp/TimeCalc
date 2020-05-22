@@ -1,14 +1,56 @@
 @page "/rounds/{id}"
 @inject ILocalStorage Store
+@inject ISolveCalculator Calculator
 
 <h4 class="page-header">Rounds</h4>
 <h5><NavLink href="rounds" title="Back to rounds" class="text-reset"><span class="oi oi-chevron-left"></span></NavLink> @GetPageHeader()</h5>
 
+@if(puzzleRound != null)
+{
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Solve</th>
+                <th scope="col">DNF</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach(var solve in puzzleRound.Solves)
+        {
+            <tr class="@GetInclusionClass(solve.Number)">
+                <td class="align-middle">@solve.Number</td>
+                <td><input class="form-control" type="text" value="@solve.Result"></td>
+                <td class="align-middle"><input type="checkbox" value="@solve.IsDNF"></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
 @code {
     [Parameter]
     public string Id { get; set; }
-
     private PuzzleRound puzzleRound;
+    private SolveCalculations calculations;
+    private PersonalBest currentPb;
+
+    protected override async Task OnInitializedAsync()
+    {
+        puzzleRound = await Store.GetPuzzleRoundAsync(Id);
+        currentPb = await GetCurrentPbForPuzzle(puzzleRound.Puzzle);
+        calculations = Calculator.GetCalculations(puzzleRound.Solves, currentPb.Average);
+    }
+
+    private async Task<PersonalBest> GetCurrentPbForPuzzle(string puzzle)
+    {
+        var pbs = await Store.GetPersonalBestsAsync();
+        if(pbs == null)
+        {
+            return null;
+        }
+        return pbs.FirstOrDefault(pb => pb.Puzzle == puzzleRound.Puzzle);
+    }
 
     private string GetPageHeader()
     {
@@ -16,12 +58,12 @@
         {
             return "";
         }
-
         return $"{puzzleRound.Puzzle} - {puzzleRound.Name}";
     }
 
-    protected override async Task OnInitializedAsync()
+    private string GetInclusionClass(int number)
     {
-        puzzleRound = await Store.GetPuzzleRoundAsync(Id);
+        return calculations.IncludedSolves.Contains(number) ? "table-success" : "";
     }
+
 }

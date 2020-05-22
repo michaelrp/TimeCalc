@@ -20,6 +20,7 @@ namespace TimeCalc
 
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddSingleton<ILocalStorage, LocalStorage>();
+            builder.Services.AddSingleton<ISolveCalculator, SolveCalculator>();
 
             await builder.Build().RunAsync();
         }

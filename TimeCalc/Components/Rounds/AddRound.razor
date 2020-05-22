@@ -33,11 +33,15 @@
 
     private async Task AddPuzzleRound()
     {
-        string[] shortSolvePuzzles = { "6x6", "7x7", "3x3 BF" };
-        var solveCount = shortSolvePuzzles.Contains(newPuzzle) ? 3 : 5;
         var id = Guid.NewGuid().ToString("N");
+        string[] shortSolvePuzzles = { "6x6", "7x7", "3x3 BF" };
+        var solves = new Solve[shortSolvePuzzles.Contains(newPuzzle) ? 3 : 5];
+        for(int i = 0; i < solves.Length; i++)
+        {
+            solves[i] = new Solve { Number = (i + 1) };
+        }
 
-        var pr = new PuzzleRound { Id = id, Puzzle = newPuzzle, Name = newName, Solves = new Solve[solveCount] };
+        var pr = new PuzzleRound { Id = id, Puzzle = newPuzzle, Name = newName, Solves = solves };
 
         await OnPuzzleRoundAdded.InvokeAsync(pr);
 
