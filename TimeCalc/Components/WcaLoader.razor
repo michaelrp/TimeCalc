@@ -8,11 +8,22 @@
             <input type="text" class="form-control" value="@wcaId" @oninput="@(e => wcaId = e.Value.ToString().Trim())" placeholder="WCA ID">
             <div class="input-group-append">
             <button class="btn btn-primary" type="button" @onclick="LoadFromWca" disabled="@isLoading">
-                Load
+                <span class="oi oi-reload @iconSpin"></span> Load
             </button>
             </div>
         </div>
     </div>
+    @if(!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="col-12">
+            <div class="card text-white bg-danger mt-3 mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Error Loading from WCA</h5>
+                    <p class="card-text">@errorMessage</p>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 @code {
@@ -20,6 +31,8 @@
     public EventCallback<string> OnWcaLoaded { get; set; }
     private string wcaId;
     private bool isLoading = false;
+    private string iconSpin = "";
+    private string errorMessage = "";
 
     public WcaLoader()
     {
@@ -29,7 +42,7 @@
     protected override async Task OnInitializedAsync()
     {
         var wcaInfo = await Store.GetWcaInfoAsync();
-        if(wcaInfo != null && !string.IsNullOrEmpty(wcaInfo.WcaId))
+        if (wcaInfo != null && !string.IsNullOrEmpty(wcaInfo.WcaId))
         {
             wcaId = wcaInfo.WcaId;
         }
@@ -37,22 +50,37 @@
 
     private async Task LoadFromWca()
     {
-        isLoading = true;
+        WcaInfo wcaInfo = new WcaInfo();
+        try
+        {
+            isLoading = true;
+            iconSpin = "oi-spin";
+            errorMessage = "";
 
-        var url = $"sample-data/{wcaId}.json";
-        var results = await Http.GetFromJsonAsync<PersonalBestResults>(url);
+            var url = $"sample-data/{wcaId}.json";
+            var results = await Http.GetFromJsonAsync<PersonalBestResults>(url);
 
-        var wcaInfo = new WcaInfo
-        { 
-            WcaId = wcaId.ToUpper(),
-            Name = results.Name,
-            AvatarUrl = results.AvatarUrl
-        };
+            wcaId = results.WcaId.ToUpper();
+            wcaInfo.WcaId = results.WcaId;
+            wcaInfo.Name = results.Name;
+            wcaInfo.AvatarUrl = results.AvatarUrl;
 
-        await Store.SaveWcaInfoAsync(wcaInfo);
-        await Store.SavePersonalBestsAsnyc(results.PersonalBests);
+            await Store.SaveWcaInfoAsync(wcaInfo);
+            await Store.SavePersonalBestsAsnyc(results.PersonalBests);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            iconSpin = "";
+            isLoading = false;
+        }
 
-        isLoading = false;
-
-        await OnWcaLoaded.InvokeAsync(wcaInfo.WcaId);
-    }}
+        if(errorMessage.Length == 0)
+        {
+            await OnWcaLoaded.InvokeAsync(wcaInfo.WcaId);
+        }
+    }
+}
