@@ -14,6 +14,11 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
+.page-header {
+    padding-bottom: 3px;
+    border-bottom: 2px solid #212529;
+}
+
 .oi-spin {
     -webkit-animation: spin 1000ms infinite linear;
     animation: spin 1000ms infinite linear;
@@ -164,8 +169,8 @@ a, .btn-link {
 }
 
 img.avatar {
-    width: 50px;
-    height: 50px;
+    max-width: 50px;
+    height: auto;
 }
 
 @media (max-width: 767.98px) {

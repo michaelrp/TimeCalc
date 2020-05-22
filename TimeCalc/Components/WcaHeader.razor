@@ -1,37 +1,27 @@
 @inject ILocalStorage Store
 
-@if(wcaInfo != null)
+@if(WcaInfo != null)
 {
-<div class="media mt-1 mb-2">
-    @if(!string.IsNullOrEmpty(wcaInfo.AvatarUrl))
-    {
-        <img class="avatar mr-1 rounded" src="@wcaInfo.AvatarUrl">
-    }
-    @if(!string.IsNullOrEmpty(wcaInfo.Name))
-    {
-        <div class="media-body">
-            <h5 class="mt-0">@wcaInfo.Name</h5>
-        </div>
-    }
-</div>
+    <div class="media mt-1 mb-2">
+        @if(!string.IsNullOrEmpty(WcaInfo.AvatarUrl))
+        {
+            <img class="avatar mr-1 rounded" src="@WcaInfo.AvatarUrl">
+        }
+        @if(!string.IsNullOrEmpty(WcaInfo.Name))
+        {
+            <div class="media-body ml-1">
+                <div>
+                    <h5 class="mt-0">@WcaInfo.Name</h5>
+                </div>
+                <div>@WcaInfo.WcaId</div>
+            </div>
+        }
+    </div>
 }
 
 @code {
-    private WcaInfo wcaInfo;
-
-    public WcaHeader()
-    {
-        wcaInfo = new WcaInfo();
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await GetWcaInfoAsync();
-    }
-
-    public async Task GetWcaInfoAsync()
-    {
-        wcaInfo = await Store.GetWcaInfoAsync();
-        StateHasChanged();
-    }
+    [Parameter]
+    public WcaInfo WcaInfo { get; set; }
+    [Parameter]
+    public EventCallback<WcaInfo> WcaInfoChanged { get; set; }
 }

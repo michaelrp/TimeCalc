@@ -1,18 +1,30 @@
 @page "/pbs"
+@inject ILocalStorage Store
 
-<h4>Personal Bests</h4>
+<h4 class="page-header">Personal Bests</h4>
 
-<WcaHeader @ref="wcaHeader" />
-<PBList @ref="pbList" />
+<WcaHeader @bind-WcaInfo="wcaInfo" />
+<PBList @bind-PersonalBests="personalBests" />
 <WcaLoader OnWcaLoaded="WcaLoadedHandler" />
 
 @code {
-    private WcaHeader wcaHeader;
-    private PBList pbList;
+    private WcaInfo wcaInfo;
+    private List<PersonalBest> personalBests;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadWcaInfo();
+    }
+
+    private async Task LoadWcaInfo()
+    {
+        wcaInfo = await Store.GetWcaInfoAsync();
+        personalBests = await Store.GetPersonalBestsAsync();
+    }
     private async Task WcaLoadedHandler(string wcaId)
     {
-        await wcaHeader.GetWcaInfoAsync();
-        await pbList.GetPersonalBestsAsync();
+        await LoadWcaInfo();
+        @* await wcaHeader.GetWcaInfoAsync();
+        await pbList.GetPersonalBestsAsync(); *@
     }
 }

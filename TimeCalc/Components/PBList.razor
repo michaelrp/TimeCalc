@@ -1,60 +1,35 @@
-@inject ILocalStorage Store
-
-<div class="form">
-    @if(personalBests != null && personalBests.Count > 0)
-    {
-        <div class="form-row mb-1">
-            <div class="col-4 text-center">Puzzle</div>
-            <div class="col-4 text-center">Single</div>
-            <div class="col-4 text-center">Average</div>
-        </div>
-        foreach(var pb in personalBests)
-        {
-            <PB PersonalBest="@pb" OnPersonalBestChanged="OnPersonalBestChanged" />
-        }
-    }
-    else
-    {
-        <div class="form-row">
-            <h5 class="col-12 mb-3">No personal bests</h5>
-        </div>
-    }
-    <div class="form-row">
-        <div class="col-12">
-            <button type="button" class="btn btn-primary" @onclick="OnAddPersonalBest">
-                <span class="oi oi-plus" title="Add a PB to track" aria-hidden="true"></span> Add
-            </button>
-        </div>
+@if(PersonalBests != null && PersonalBests.Count() > 0)
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Puzzle</th>
+            <th scope="col">Single</th>
+            <th scope="col">Average</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var best in PersonalBests)
+            {
+                <tr>
+                    <td>@best.Puzzle</td>
+                    <td>@best.Single</td>
+                    <td>@best.Average</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div>
+        <p>No personal bests loaded.</p>
     </div>
-</div>
+}
 
 @code {
-    List<PersonalBest> personalBests;
-
-    public PBList()
-    {
-        personalBests = new List<PersonalBest>();
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await GetPersonalBestsAsync();
-    }
-
-    public async Task GetPersonalBestsAsync()
-    {
-        personalBests = await Store.GetPersonalBestsAsync();
-        StateHasChanged();
-    }
-
-    private async Task OnPersonalBestChanged(PersonalBest pb)
-    {
-        // update storage
-        await Store.SavePersonalBestsAsnyc(personalBests);
-    }
-
-    private void OnAddPersonalBest()
-    {
-        personalBests.Add(new PersonalBest());
-    }
+    [Parameter]
+    public List<PersonalBest> PersonalBests { get; set; }
+    [Parameter]
+    public EventCallback<List<PersonalBest>> PersonalBestsChanged { get; set; }
 }
