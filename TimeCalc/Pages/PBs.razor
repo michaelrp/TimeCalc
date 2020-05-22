@@ -12,7 +12,6 @@
 
     private async Task WcaLoadedHandler(string wcaId)
     {
-        Console.WriteLine("WcaLoadedHandler", "wcaId", wcaId);
         await wcaHeader.GetWcaInfoAsync();
         await pbList.GetPersonalBestsAsync();
     }

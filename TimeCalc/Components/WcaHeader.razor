@@ -1,5 +1,7 @@
 @inject ILocalStorage Store
 
+@if(wcaInfo != null)
+{
 <div class="media mt-1 mb-2">
     @if(!string.IsNullOrEmpty(wcaInfo.AvatarUrl))
     {
@@ -12,6 +14,7 @@
         </div>
     }
 </div>
+}
 
 @code {
     private WcaInfo wcaInfo;
@@ -29,5 +32,6 @@
     public async Task GetWcaInfoAsync()
     {
         wcaInfo = await Store.GetWcaInfoAsync();
+        StateHasChanged();
     }
 }

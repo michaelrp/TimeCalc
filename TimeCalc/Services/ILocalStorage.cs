@@ -6,6 +6,7 @@ namespace TimeCalc.Services
 {
     public interface ILocalStorage
     {
+        Task ClearAllDataAsync();
         Task<List<PersonalBest>> GetPersonalBestsAsync();
         Task<WcaInfo> GetWcaInfoAsync();
         Task SavePersonalBestsAsnyc(List<PersonalBest> personalBests);

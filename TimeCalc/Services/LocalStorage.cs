@@ -16,6 +16,12 @@ namespace TimeCalc.Services
             this.jsRuntime = jsRuntime;
         }
 
+        public async Task ClearAllDataAsync()
+        {
+            await SetValueAsync<List<PersonalBest>>("pbs", null);
+            await SetValueAsync<WcaInfo>("wca", null);
+        }
+
         public async Task<List<PersonalBest>> GetPersonalBestsAsync()
         {
             return await GetValueAsync<List<PersonalBest>>("pbs");
