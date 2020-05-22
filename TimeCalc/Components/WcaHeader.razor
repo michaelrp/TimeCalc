@@ -1,0 +1,33 @@
+@inject ILocalStorage Store
+
+<div class="media mt-1 mb-2">
+    @if(!string.IsNullOrEmpty(wcaInfo.AvatarUrl))
+    {
+        <img class="avatar mr-1 rounded" src="@wcaInfo.AvatarUrl">
+    }
+    @if(!string.IsNullOrEmpty(wcaInfo.Name))
+    {
+        <div class="media-body">
+            <h5 class="mt-0">@wcaInfo.Name</h5>
+        </div>
+    }
+</div>
+
+@code {
+    private WcaInfo wcaInfo;
+
+    public WcaHeader()
+    {
+        wcaInfo = new WcaInfo();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetWcaInfoAsync();
+    }
+
+    public async Task GetWcaInfoAsync()
+    {
+        wcaInfo = await Store.GetWcaInfoAsync();
+    }
+}

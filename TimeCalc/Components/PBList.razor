@@ -1,0 +1,59 @@
+@inject ILocalStorage Store
+
+<div class="form">
+    @if(personalBests != null && personalBests.Count > 0)
+    {
+        <div class="form-row mb-1">
+            <div class="col-4 text-center">Puzzle</div>
+            <div class="col-4 text-center">Single</div>
+            <div class="col-4 text-center">Average</div>
+        </div>
+        foreach(var pb in personalBests)
+        {
+            <PB PersonalBest="@pb" OnPersonalBestChanged="OnPersonalBestChanged" />
+        }
+    }
+    else
+    {
+        <div class="form-row">
+            <h5 class="col-12 mb-3">No personal bests</h5>
+        </div>
+    }
+    <div class="form-row">
+        <div class="col-12">
+            <button type="button" class="btn btn-primary" @onclick="OnAddPersonalBest">
+                Add
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    List<PersonalBest> personalBests;
+
+    public PBList()
+    {
+        personalBests = new List<PersonalBest>();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetPersonalBestsAsync();
+    }
+
+    public async Task GetPersonalBestsAsync()
+    {
+        personalBests = await Store.GetPersonalBestsAsync();
+    }
+
+    private async Task OnPersonalBestChanged(PersonalBest pb)
+    {
+        // update storage
+        await Store.SavePersonalBestsAsnyc(personalBests);
+    }
+
+    private void OnAddPersonalBest()
+    {
+        personalBests.Add(new PersonalBest());
+    }
+}

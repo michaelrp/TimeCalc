@@ -1,0 +1,58 @@
+@inject HttpClient Http
+@inject ILocalStorage Store
+
+<hr />
+<div class="form mt-2">
+    <div class="col-12">
+        <div class="input-group">
+            <input type="text" class="form-control" value="@wcaId" @oninput="@(e => wcaId = e.Value.ToString().Trim())" placeholder="WCA ID">
+            <div class="input-group-append">
+            <button class="btn btn-primary" type="button" @onclick="LoadFromWca" disabled="@isLoading">
+                Load
+            </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<string> OnWcaLoaded { get; set; }
+    private string wcaId;
+    private bool isLoading = false;
+
+    public WcaLoader()
+    {
+        wcaId = "";
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var wcaInfo = await Store.GetWcaInfoAsync();
+        if(wcaInfo != null && !string.IsNullOrEmpty(wcaInfo.WcaId))
+        {
+            wcaId = wcaInfo.WcaId;
+        }
+    }
+
+    private async Task LoadFromWca()
+    {
+        isLoading = true;
+
+        var url = $"sample-data/{wcaId}.json";
+        var results = await Http.GetFromJsonAsync<PersonalBestResults>(url);
+
+        var wcaInfo = new WcaInfo
+        { 
+            WcaId = wcaId.ToUpper(),
+            Name = results.Name,
+            AvatarUrl = results.AvatarUrl
+        };
+
+        await Store.SaveWcaInfoAsync(wcaInfo);
+        await Store.SavePersonalBestsAsnyc(results.PersonalBests);
+
+        isLoading = false;
+
+        await OnWcaLoaded.InvokeAsync(wcaInfo.WcaId);
+    }}
