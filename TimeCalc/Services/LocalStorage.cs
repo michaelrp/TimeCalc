@@ -18,29 +18,28 @@ namespace TimeCalc.Services
 
         public async Task ClearAllDataAsync()
         {
-            await SetValueAsync<List<PersonalBest>>("pbs", null);
-            await SetValueAsync<WcaInfo>("wca", null);
+            await SavePersonalBestsAsnyc(null);
+            await SavePuzzleRounds(null);
+            await SaveWcaInfoAsync(null);
         }
 
         public async Task<List<PersonalBest>> GetPersonalBestsAsync()
-        {
-            return await GetValueAsync<List<PersonalBest>>("pbs");
-        }
+            => await GetValueAsync<List<PersonalBest>>("pbs");
+
+        public async Task<List<PuzzleRound>> GetPuzzleRoundsAsync()
+            => await GetValueAsync<List<PuzzleRound>>("prs");
 
         public async Task<WcaInfo> GetWcaInfoAsync()
-        {
-            return await GetValueAsync<WcaInfo>("wca");
-        }
+            => await GetValueAsync<WcaInfo>("wca");
 
         public async Task SavePersonalBestsAsnyc(List<PersonalBest> personalBests)
-        {
-            await SetValueAsync<List<PersonalBest>>("pbs", personalBests);
-        }
+            => await SetValueAsync<List<PersonalBest>>("pbs", personalBests);
+
+        public async Task SavePuzzleRounds(List<PuzzleRound> puzzleRounds)
+            => await SetValueAsync<List<PuzzleRound>>("prs", puzzleRounds);
 
         public async Task SaveWcaInfoAsync(WcaInfo wcaInfo)
-        {
-            await SetValueAsync<WcaInfo>("wca", wcaInfo);
-        }
+            => await SetValueAsync<WcaInfo>("wca", wcaInfo);
 
         private async Task<T> GetValueAsync<T>(string key)
         {

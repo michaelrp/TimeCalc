@@ -1,0 +1,47 @@
+@if(showAdd)
+{
+    <div class="form-row mt-2">
+        <div class="form-group col-4">
+            <select class="form-control" @bind="newPuzzle">
+                <option value="">Puzzle...</option>
+                @foreach (var puzzle in puzzles)
+                {
+                    <option value="@puzzle">@puzzle</option>
+                }
+            </select>
+        </div>
+        <div class="form-group col-6">
+            <input text="type" class="form-control" @bind="@newName" placeholder="Name" />
+        </div>
+        <div class="form-group col-2">
+            <button type="button" class="btn btn-success float-right" @onclick="AddPuzzleRound">
+                <span class="oi oi-check"></span>
+            </button>
+        </div>
+    </div>
+}
+
+<button class="btn btn-primary" type="button" @onclick="() => showAdd = true">Add</button>
+
+@code {
+    [Parameter]
+    public EventCallback<PuzzleRound> OnPuzzleRoundAdded { get; set; }
+    private string[] puzzles = { "2x2", "3x3", "4x4", "5x5", "6x6", "7x7", "Skewb", "Pyraminx", "Megaminx", "3x3 OH", "3x3 BF", "3x3 Feet", "Square-1" };
+    bool showAdd = false;
+    string newPuzzle = "";
+    string newName = "";
+
+    private async Task AddPuzzleRound()
+    {
+        string[] shortSolvePuzzles = { "6x6", "7x7", "3x3 BF" };
+        var solveCount = shortSolvePuzzles.Contains(newPuzzle) ? 3 : 5;
+
+        var pr = new PuzzleRound { Puzzle = newPuzzle, Name = newName, Solves = new Solve[solveCount] };
+
+        await OnPuzzleRoundAdded.InvokeAsync(pr);
+
+        showAdd = false;
+        newPuzzle = "";
+        newName = "";        
+    }
+}

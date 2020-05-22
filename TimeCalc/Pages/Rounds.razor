@@ -1,3 +1,36 @@
 @page "/rounds"
+@using TimeCalc.Components.Rounds
+@inject ILocalStorage Store
 
 <h4 class="page-header">Rounds</h4>
+
+@if(puzzleRounds != null && puzzleRounds.Count > 0)
+{
+    <ul class="list-group">
+        @foreach (var puzzleRound in puzzleRounds)
+        {
+            <li class="list-group-item">@puzzleRound.Puzzle - @puzzleRound.Name</li>
+        }
+    </ul>
+}
+
+<AddRound OnPuzzleRoundAdded="@PuzzleRoundAddedHandler" />
+
+@code {
+    private List<PuzzleRound> puzzleRounds;
+
+    protected override async Task OnInitializedAsync()
+    {
+        puzzleRounds = await Store.GetPuzzleRoundsAsync();
+        if(puzzleRounds == null)
+        {
+            puzzleRounds = new List<PuzzleRound>();
+        }
+    }
+
+    private async Task PuzzleRoundAddedHandler(PuzzleRound pr)
+    {
+        puzzleRounds.Add(pr);
+        await Store.SavePuzzleRounds(puzzleRounds);
+    }
+}
