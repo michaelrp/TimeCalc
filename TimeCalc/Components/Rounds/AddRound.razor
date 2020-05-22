@@ -21,7 +21,7 @@
     </div>
 }
 
-<button class="btn btn-primary" type="button" @onclick="() => showAdd = true">Add</button>
+<button class="btn btn-primary" type="button" @onclick="() => showAdd = true"><span class="oi oi-plus"></span> Add</button>
 
 @code {
     [Parameter]
@@ -35,8 +35,9 @@
     {
         string[] shortSolvePuzzles = { "6x6", "7x7", "3x3 BF" };
         var solveCount = shortSolvePuzzles.Contains(newPuzzle) ? 3 : 5;
+        var id = Guid.NewGuid().ToString("N");
 
-        var pr = new PuzzleRound { Puzzle = newPuzzle, Name = newName, Solves = new Solve[solveCount] };
+        var pr = new PuzzleRound { Id = id, Puzzle = newPuzzle, Name = newName, Solves = new Solve[solveCount] };
 
         await OnPuzzleRoundAdded.InvokeAsync(pr);
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
@@ -25,6 +26,9 @@ namespace TimeCalc.Services
 
         public async Task<List<PersonalBest>> GetPersonalBestsAsync()
             => await GetValueAsync<List<PersonalBest>>("pbs");
+
+        public async Task<PuzzleRound> GetPuzzleRoundAsync(string id)
+            => (await GetPuzzleRoundsAsync()).FirstOrDefault(p => p.Id == id);
 
         public async Task<List<PuzzleRound>> GetPuzzleRoundsAsync()
             => await GetValueAsync<List<PuzzleRound>>("prs");

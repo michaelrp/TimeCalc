@@ -9,9 +9,18 @@
     <ul class="list-group">
         @foreach (var puzzleRound in puzzleRounds)
         {
-            <li class="list-group-item">@puzzleRound.Puzzle - @puzzleRound.Name</li>
+            <li class="list-group-item">
+                <NavLink href=@GetRoundHref(puzzleRound.Id) title="View round details" class="text-reset">
+                    <span class="oi oi-chevron-right"></span> @puzzleRound.Puzzle - @puzzleRound.Name
+                </NavLink>
+                <div class="float-right" role="button" @onclick="@(e => DeletePuzzleRound(e, puzzleRound.Id))"><span class="oi oi-trash"></span></div>
+            </li>
         }
     </ul>
+}
+else
+{
+    <p>No rounds</p>
 }
 
 <AddRound OnPuzzleRoundAdded="@PuzzleRoundAddedHandler" />
@@ -27,6 +36,15 @@
             puzzleRounds = new List<PuzzleRound>();
         }
     }
+
+    private async Task DeletePuzzleRound(MouseEventArgs e, string id)
+    {
+        var pr = puzzleRounds.FirstOrDefault(pz => pz.Id == id);
+        puzzleRounds.Remove(pr);
+        await Store.SavePuzzleRounds(puzzleRounds);
+    }
+
+    private string GetRoundHref(string id) => $"rounds/{id}";
 
     private async Task PuzzleRoundAddedHandler(PuzzleRound pr)
     {

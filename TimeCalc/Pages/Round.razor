@@ -1,8 +1,27 @@
-@page "/round"
+@page "/rounds/{id}"
+@inject ILocalStorage Store
 
-<h4 class="page-header">@PuzzleRound.Puzzle - @PuzzleRound.Name</h4>
+<h4 class="page-header">Rounds</h4>
+<h5><NavLink href="rounds" title="Back to rounds" class="text-reset"><span class="oi oi-chevron-left"></span></NavLink> @GetPageHeader()</h5>
 
 @code {
     [Parameter]
-    public PuzzleRound PuzzleRound { get; set; }
+    public string Id { get; set; }
+
+    private PuzzleRound puzzleRound;
+
+    private string GetPageHeader()
+    {
+        if(puzzleRound == null)
+        {
+            return "";
+        }
+
+        return $"{puzzleRound.Puzzle} - {puzzleRound.Name}";
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        puzzleRound = await Store.GetPuzzleRoundAsync(Id);
+    }
 }

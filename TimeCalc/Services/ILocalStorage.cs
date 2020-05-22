@@ -8,6 +8,7 @@ namespace TimeCalc.Services
     {
         Task ClearAllDataAsync();
         Task<List<PersonalBest>> GetPersonalBestsAsync();
+        Task<PuzzleRound> GetPuzzleRoundAsync(string id);
         Task<List<PuzzleRound>> GetPuzzleRoundsAsync();
         Task<WcaInfo> GetWcaInfoAsync();
         Task SavePersonalBestsAsnyc(List<PersonalBest> personalBests);
