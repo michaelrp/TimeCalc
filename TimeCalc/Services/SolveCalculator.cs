@@ -15,9 +15,37 @@ namespace TimeCalc.Services
             var currentAverage = "";
             var neededForNewPb = "";
 
-            return new SolveCalculations { IncludedSolves = includedSolves,  CurrentAverage = currentAverage, NeededForNewPB = neededForNewPb };
+            return new SolveCalculations { IncludedSolves = includedSolves, CurrentAverage = currentAverage, NeededForNewPB = neededForNewPb };
         }
 
+        public string GetCurrentAverage(float[] times)
+        {
+            if(times.Count() < 3)
+            {
+                return " - ";
+            }
+            
+            return ConvertSecondsToResult(times.Average());
+        }
+        /*
+
+        getAverage(): string {
+            let average = 0.0;
+
+            const times = this.getIncludedTimes();
+
+            if (times.length > 0) {
+                average = this.round(times.reduce((a, c) => a + c, 0.0) / times.length);
+            }
+
+            const result = this.convertSecondsToResult(average);
+
+            // console.log('getAverage', average, result);
+
+            return result;
+        }
+
+        */
         public IEnumerable<Tuple<int, float>> GetIncludedSolves(Solve[] solves)
         {
             var converted = solves.Where(s => !string.IsNullOrEmpty(s.Result))
@@ -72,7 +100,7 @@ namespace TimeCalc.Services
             var mils = "0";
 
             var parts = input.ToString().Split(".");
-            if(parts.Length > 1)
+            if (parts.Length > 1)
             {
                 mils = parts[1].Length > 2 ? parts[1].Substring(0, 2) : parts[1];
             }
@@ -80,7 +108,7 @@ namespace TimeCalc.Services
 
             var result = "0.00";
 
-            if(input < 60)
+            if (input < 60)
             {
                 result = $"{secs}.{mils}";
             }

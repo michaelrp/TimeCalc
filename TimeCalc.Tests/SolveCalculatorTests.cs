@@ -84,5 +84,15 @@ namespace TimeCalc.Tests
 
             Assert.Equal(included, orderedResult);
         }
+
+        [Theory]
+        [InlineData("8.36", 8.77, 7.93, 8.39)]
+        [InlineData("43.54", 42.63, 39.73, 48.26)]
+        [InlineData("1:06.32", 66.54, 63.27, 69.14)]
+        [InlineData(" - ", 7.86, 8.01)]
+        public void GetCurrentAverage(string result, params float[] times)
+        {
+
+        }
     }    
 }
