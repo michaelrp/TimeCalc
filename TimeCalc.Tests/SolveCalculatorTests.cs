@@ -37,6 +37,24 @@ namespace TimeCalc.Tests
             Assert.Equal(result, calc.ConvertResultToSeconds(input));
         }
 
+        [Theory]
+        [InlineData(9.342, "9.34")]
+        [InlineData(8.0, "8.00")]
+        [InlineData(.42, "0.42")]
+        [InlineData(43.1, "43.10")]
+        [InlineData(43.109, "43.10")]
+        [InlineData(62.01, "1:02.01")]
+        [InlineData(62.019, "1:02.01")]
+        [InlineData(62.0109, "1:02.01")]
+        [InlineData(60.1, "1:00.10")]
+        [InlineData(60.0001, "1:00.00")]
+        public void ConvertSecondsToResult(float input, string result)
+        {
+            var calc = new SolveCalculator();
+
+            Assert.Equal(result, calc.ConvertSecondsToResult(input));
+        }
+
 /*
 8.36		7.71	8.77	7.93	9.89	8.39
 43.54		42.63	54.83	38.05	39.73	48.26

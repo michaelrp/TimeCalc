@@ -37,8 +37,15 @@
     <h5>PBs</h5>
     <div class="form-group">
         <div>
-            <strong>Single:</strong> @currentPb.Single
-            <strong>Average:</strong> @currentPb.Average
+            @if(currentPb != null)
+            {
+                <strong>Single:</strong> @currentPb.Single
+                <strong>Average:</strong> @currentPb.Average
+            }
+            else
+            {
+                <div>No personal bests for @puzzleRound.Puzzle</div>
+            }
         </div>
     </div>
 }
@@ -56,7 +63,8 @@
     {
         puzzleRound = await Store.GetPuzzleRoundAsync(Id);
         currentPb = await GetCurrentPbForPuzzle(puzzleRound.Puzzle);
-        calculations = Calculator.GetCalculations(puzzleRound.Solves, currentPb.Average);
+        var pbAverage = currentPb == null ? "" : currentPb.Average;
+        calculations = Calculator.GetCalculations(puzzleRound.Solves, pbAverage);
     }
 
     private async Task<PersonalBest> GetCurrentPbForPuzzle(string puzzle)

@@ -9,7 +9,13 @@ namespace TimeCalc.Services
     {
         public SolveCalculations GetCalculations(Solve[] solves, string pb)
         {
-            return new SolveCalculations { IncludedSolves = new int[] { 1, 2 } };
+            var includedSolvesWithConvertedTime = GetIncludedSolves(solves);
+            var includedSolves = includedSolvesWithConvertedTime.Select(s => s.Item1).ToArray();
+
+            var currentAverage = "";
+            var neededForNewPb = "";
+
+            return new SolveCalculations { IncludedSolves = includedSolves,  CurrentAverage = currentAverage, NeededForNewPB = neededForNewPb };
         }
 
         public IEnumerable<Tuple<int, float>> GetIncludedSolves(Solve[] solves)
@@ -56,6 +62,34 @@ namespace TimeCalc.Services
             }
 
             return converted;
+        }
+
+        public string ConvertSecondsToResult(float input)
+        {
+            var seconds = (int)Math.Truncate(input);
+            var mins = seconds / 60;
+            var secs = seconds % 60;
+            var mils = "0";
+
+            var parts = input.ToString().Split(".");
+            if(parts.Length > 1)
+            {
+                mils = parts[1].Length > 2 ? parts[1].Substring(0, 2) : parts[1];
+            }
+            mils = mils.PadRight(2, '0');
+
+            var result = "0.00";
+
+            if(input < 60)
+            {
+                result = $"{secs}.{mils}";
+            }
+            else
+            {
+                result = $"{mins}:{secs.ToString("D2")}.{mils}";
+            }
+
+            return result;
         }
 
         [Obsolete]
