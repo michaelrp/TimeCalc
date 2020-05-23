@@ -27,9 +27,20 @@
         </tbody>
     </table>
     <hr />
-    <AverageCalculations @bind-Solves="puzzleRound.Solves"
-                         CurrentPbAverage="@currentPb.Average"
-                         CurrentPbSingle="@currentPb.Single" />
+    <h5>Averages</h5>
+    <div class="form-group">
+        <div>
+            <strong>Current:</strong> @calculations.CurrentAverage
+            <strong>For PB:</strong> @calculations.NeededForNewPB
+        </div>
+    </div>
+    <h5>PBs</h5>
+    <div class="form-group">
+        <div>
+            <strong>Single:</strong> @currentPb.Single
+            <strong>Average:</strong> @currentPb.Average
+        </div>
+    </div>
 }
 
 <span></span>
