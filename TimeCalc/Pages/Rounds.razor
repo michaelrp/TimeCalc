@@ -23,7 +23,9 @@ else
     <p>No rounds</p>
 }
 
-<AddRound OnPuzzleRoundAdded="@PuzzleRoundAddedHandler" />
+<div class="mt-2">
+    <AddRound OnPuzzleRoundAdded="@PuzzleRoundAddedHandler" />
+</div>
 
 @code {
     private List<PuzzleRound> puzzleRounds;

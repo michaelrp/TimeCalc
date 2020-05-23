@@ -1,9 +1,9 @@
 @page "/rounds/{id}"
+@using TimeCalc.Components.Rounds
 @inject ILocalStorage Store
 @inject ISolveCalculator Calculator
 
-<h4 class="page-header">Rounds</h4>
-<h5><NavLink href="rounds" title="Back to rounds" class="text-reset"><span class="oi oi-chevron-left"></span></NavLink> @GetPageHeader()</h5>
+<h4 class="page-header"><NavLink href="rounds" title="Back to rounds" class="text-reset"><span class="oi oi-chevron-left"></span></NavLink> @GetPageHeader()</h4>
 
 @if(puzzleRound != null)
 {
@@ -26,7 +26,13 @@
         }
         </tbody>
     </table>
+    <hr />
+    <AverageCalculations @bind-Solves="puzzleRound.Solves"
+                         CurrentPbAverage="@currentPb.Average"
+                         CurrentPbSingle="@currentPb.Single" />
 }
+
+<span></span>
 
 @code {
     [Parameter]

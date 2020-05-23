@@ -1,0 +1,42 @@
+@using TimeCalc.Models
+@using TimeCalc.Services
+@inject ISolveCalculator Calc
+
+<h5>Average Calculations</h5>
+    <div class="form-group">
+      <div>
+        <strong>Current:</strong> @currentAverage
+        <strong>For PB:</strong> @neededForPb
+      </div>
+    </div>
+    <h5>PBs</h5>
+    <div class="form-group">
+      <div>
+        <strong>Single:</strong> @CurrentPbSingle
+        <strong>Average:</strong> @CurrentPbAverage
+      </div>
+    </div>
+
+@code {
+    [Parameter]
+    public Solve[] Solves { get; set; }
+    [Parameter]
+    public EventCallback<Solve[]> SolvesChanged { get; set; }
+    [Parameter]
+    public string CurrentPbAverage { get; set;}
+    [Parameter]
+    public string CurrentPbSingle { get; set; }
+    private string currentAverage = "NA";
+    private string neededForPb = "NA";
+
+    protected override void OnInitialized()
+    {
+        Calculate();
+    }
+
+    public void Calculate()
+    {
+        var calculations = Calc.GetCalculations(Solves, CurrentPbAverage);
+
+    }
+}
