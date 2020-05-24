@@ -22,14 +22,14 @@ namespace TimeCalc.Tests
         // }
 
         [Theory]
-        [InlineData("9.342", 9.34)]
-        [InlineData(".42", 0.42)]
-        [InlineData("43.10", 43.1)]
-        [InlineData("43.1", 43.1)]
-        [InlineData("43.100", 43.1)]
-        [InlineData("43.109", 43.1)]
-        [InlineData("1:02.010", 62.01)]
-        [InlineData("1:0.1", 60.1)]
+        [InlineData("9.342", 9.34f)]
+        [InlineData(".42", 0.42f)]
+        [InlineData("43.10", 43.1f)]
+        [InlineData("43.1", 43.1f)]
+        [InlineData("43.100", 43.1f)]
+        [InlineData("43.109", 43.1f)]
+        [InlineData("1:02.010", 62.01f)]
+        [InlineData("1:0.1", 60.1f)]
         public void ConvertResultToSeconds(string input, float result)
         {
             var calc = new SolveCalculator();
@@ -38,16 +38,16 @@ namespace TimeCalc.Tests
         }
 
         [Theory]
-        [InlineData(9.342, "9.34")]
-        [InlineData(8.0, "8.00")]
-        [InlineData(.42, "0.42")]
-        [InlineData(43.1, "43.10")]
+        [InlineData(9.342f, "9.34")]
+        [InlineData(8.0f, "8.00")]
+        [InlineData(.42f, "0.42")]
+        [InlineData(43.1f, "43.10")]
         [InlineData(43.109, "43.10")]
-        [InlineData(62.01, "1:02.01")]
-        [InlineData(62.019, "1:02.01")]
-        [InlineData(62.0109, "1:02.01")]
-        [InlineData(60.1, "1:00.10")]
-        [InlineData(60.0001, "1:00.00")]
+        [InlineData(62.01f, "1:02.01")]
+        [InlineData(62.019f, "1:02.01")]
+        [InlineData(62.0109f, "1:02.01")]
+        [InlineData(60.1f, "1:00.10")]
+        [InlineData(60.0001f, "1:00.00")]
         public void ConvertSecondsToResult(float input, string result)
         {
             var calc = new SolveCalculator();
@@ -86,13 +86,15 @@ namespace TimeCalc.Tests
         }
 
         [Theory]
-        [InlineData("8.36", 8.77, 7.93, 8.39)]
-        [InlineData("43.54", 42.63, 39.73, 48.26)]
-        [InlineData("1:06.32", 66.54, 63.27, 69.14)]
-        [InlineData(" - ", 7.86, 8.01)]
+        [InlineData("8.36", 8.77f, 7.93f, 8.39f)]
+        [InlineData("43.54", 42.63f, 39.73f, 48.26f)]
+        [InlineData("1:06.32", 66.54f, 63.27f, 69.14f)]
+        [InlineData(" - ", 7.86f, 8.01f)]
         public void GetCurrentAverage(string result, params float[] times)
         {
+            var calc = new SolveCalculator();
 
+            Assert.Equal(result, calc.GetCurrentAverage(times));
         }
     }    
 }

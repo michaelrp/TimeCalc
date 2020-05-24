@@ -24,28 +24,13 @@ namespace TimeCalc.Services
             {
                 return " - ";
             }
-            
-            return ConvertSecondsToResult(times.Average());
-        }
-        /*
 
-        getAverage(): string {
-            let average = 0.0;
+            // No round for float, so convert to a double and back?
+            var avg = Math.Round((double)(times.Average()), 2);
 
-            const times = this.getIncludedTimes();
-
-            if (times.length > 0) {
-                average = this.round(times.reduce((a, c) => a + c, 0.0) / times.length);
-            }
-
-            const result = this.convertSecondsToResult(average);
-
-            // console.log('getAverage', average, result);
-
-            return result;
+            return ConvertSecondsToResult((float)avg);
         }
 
-        */
         public IEnumerable<Tuple<int, float>> GetIncludedSolves(Solve[] solves)
         {
             var converted = solves.Where(s => !string.IsNullOrEmpty(s.Result))
