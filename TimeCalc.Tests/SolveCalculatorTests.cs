@@ -147,6 +147,7 @@ namespace TimeCalc.Tests
 
         [Theory]
         [InlineData("24.91", "28.93", 29.36f, 32.5f, 35.85f)]
+        [InlineData("7.50", "8.36", 7.3f, 10.26f, 10.33f)]
         public void GetNeededForNewPb(string result, string pb, params float[] times)
         {
             var calc = new SolveCalculator();

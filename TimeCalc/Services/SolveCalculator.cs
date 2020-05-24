@@ -58,12 +58,12 @@ namespace TimeCalc.Services
             // also, floating point math is :( when decimal places matter
             var neededDiff = 0.01d;
             var multipliedPb = Math.Round(3.0d * pb, 2);
-            while(Math.Round((multipliedPb - neededDiff) / 3.0, 2) == roundedPb)
+            while(Math.Round(Math.Round(multipliedPb - neededDiff, 2) / 3.0, 2) == roundedPb)
             {
-                neededDiff += 0.01;
+                neededDiff = Math.Round(neededDiff + 0.01, 2);
             }
 
-            var needed = (3f * pb) - times[0] - times[1] - (float)neededDiff;
+            var needed = (float)Math.Round(multipliedPb - times[0] - times[1] - neededDiff, 2);
 
             return ConvertSecondsToResult(needed);
         }
