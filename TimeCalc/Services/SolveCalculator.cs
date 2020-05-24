@@ -7,28 +7,18 @@ namespace TimeCalc.Services
 {
     public class SolveCalculator : ISolveCalculator
     {
+        private const string NA = " - ";
+
         public SolveCalculations GetCalculations(Solve[] solves, string pb)
         {
-            var includedSolvesWithConvertedTime = GetIncludedSolves(solves);
-            var includedSolves = includedSolvesWithConvertedTime.Select(s => s.Item1).ToArray();
+            var includedSolves = GetIncludedSolves(solves);
+            var includedSolvesNumbers = includedSolves.Select(s => s.Item1).ToArray();
 
-            var currentAverage = "";
-            var neededForNewPb = "";
+            var times = includedSolves.Select(s => s.Item2).ToArray();
+            var currentAverage = GetCurrentAverage(times);
+            var neededForNewPb = (solves.Count() == 5) ? NA : GetNeededForNewPb(times, pb);
 
-            return new SolveCalculations { IncludedSolves = includedSolves, CurrentAverage = currentAverage, NeededForNewPB = neededForNewPb };
-        }
-
-        public string GetCurrentAverage(float[] times)
-        {
-            if(times.Count() < 3)
-            {
-                return " - ";
-            }
-
-            // No round for float, so convert to a double and back?
-            var avg = Math.Round((double)(times.Average()), 2);
-
-            return ConvertSecondsToResult((float)avg);
+            return new SolveCalculations { IncludedSolves = includedSolvesNumbers, CurrentAverage = currentAverage, NeededForNewPB = neededForNewPb };
         }
 
         public IEnumerable<Tuple<int, float>> GetIncludedSolves(Solve[] solves)
@@ -38,6 +28,44 @@ namespace TimeCalc.Services
                                   .OrderBy(s => s.Item2);
 
             return converted.Count() < 4 ? converted : converted.Skip(1).Take(3);
+        }
+
+        public string GetCurrentAverage(float[] times)
+        {
+            if(times.Count() < 3)
+            {
+                return NA;
+            }
+
+            // No round for float, so convert to a double and back?
+            var avg = Math.Round((double)(times.Average()), 2);
+
+            return ConvertSecondsToResult((float)avg);
+        }
+
+        public string GetNeededForNewPb(float[] times, string currentPb)
+        {
+            if(times.Count() < 2)
+            {
+                return NA;
+            }
+
+            var pb = ConvertResultToSeconds(currentPb);
+            var roundedPb = Math.Round((double)pb, 2);
+
+            // iterate through average calculation and round to find
+            // needed difference in a single solve, will be 0.01 - 0.03
+            // also, floating point math is :( when decimal places matter
+            var neededDiff = 0.01d;
+            var multipliedPb = Math.Round(3.0d * pb, 2);
+            while(Math.Round((multipliedPb - neededDiff) / 3.0, 2) == roundedPb)
+            {
+                neededDiff += 0.01;
+            }
+
+            var needed = (3f * pb) - times[0] - times[1] - (float)neededDiff;
+
+            return ConvertSecondsToResult(needed);
         }
 
         public float ConvertResultToSeconds(string input)
