@@ -14,6 +14,7 @@ namespace TimeCalc.Services
         Task SavePersonalBestsAsnyc(List<PersonalBest> personalBests);
         Task SavePuzzleRounds(List<PuzzleRound> puzzleRounds);
         Task SaveWcaInfoAsync(WcaInfo wcaInfo);
+        Task UpdateSolve(string roundId, int solveNumber, string solveResult);
     }
 
 }

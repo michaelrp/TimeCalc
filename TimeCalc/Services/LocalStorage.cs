@@ -45,6 +45,38 @@ namespace TimeCalc.Services
         public async Task SaveWcaInfoAsync(WcaInfo wcaInfo)
             => await SetValueAsync<WcaInfo>("wca", wcaInfo);
 
+        public async Task UpdateSolve(string roundId, int solveNumber, string solveResult)
+        {
+            if(string.IsNullOrEmpty(roundId))
+            {
+                throw new ArgumentNullException(nameof(roundId), "Must have a value.");
+            }
+
+            var rounds = await GetPuzzleRoundsAsync();
+            if(rounds == null)
+            {
+                throw new NullReferenceException($"No rounds exist.");
+            }
+
+            var round = rounds.First(r => r.Id == roundId);
+            if(round == null)
+            {
+                throw new NullReferenceException($"Puzzle round {roundId} not found in local store.");
+            }
+
+            if(solveNumber < 1 || solveNumber > round.Solves.Count())
+            {
+                throw new ArgumentOutOfRangeException(nameof(solveNumber), $"Should be between 1 and {round.Solves.Count()}");
+            }
+
+            var solveIndex = solveNumber - 1;
+            var solve = round.Solves[solveIndex];
+            solve.Result = solveResult;
+            round.Solves[solveIndex] = solve;
+
+            await SavePuzzleRounds(rounds);
+        }
+
         private async Task<T> GetValueAsync<T>(string key)
         {
             if (string.IsNullOrEmpty(key))

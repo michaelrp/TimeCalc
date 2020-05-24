@@ -44,7 +44,35 @@ namespace TimeCalc.Tests
                         .Select(s => s.Item1).ToArray();
 
             Assert.Equal(results, orderedResults);
+        }
 
+        [Fact]
+        public void GetSolvesCompleted()
+        {
+            var calc = new SolveCalculator();
+            var solves = Enumerable.Range(1, 5).Select(n => new Solve { Number = n, Result = "" }).ToArray();
+
+            var count = solves.Count();
+            Assert.Equal(count, calc.GetRemainingSolvesCount(solves));
+            for(int i = 0; i < count; i++)
+            {
+                var remaining = count - 1 - i;
+                solves[i].Result = $"9.0";
+
+                Assert.Equal(remaining, calc.GetRemainingSolvesCount(solves));
+            }
+
+
+            solves = Enumerable.Range(1, 3).Select(n => new Solve { Number = n, Result = "" }).ToArray();
+            count = solves.Count();
+            Assert.Equal(count, calc.GetRemainingSolvesCount(solves));
+            for(int i = 0; i < count; i++)
+            {
+                var remaining = count - 1 - i;
+                solves[i].Result = $"9.0";
+
+                Assert.Equal(remaining, calc.GetRemainingSolvesCount(solves));
+            }
         }
 
         [Theory]

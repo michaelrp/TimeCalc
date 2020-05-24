@@ -16,7 +16,7 @@ namespace TimeCalc.Services
 
             var times = includedSolves.Select(s => s.Item2).ToArray();
             var currentAverage = GetCurrentAverage(times);
-            var neededForNewPb = (solves.Count() == 5) ? NA : GetNeededForNewPb(times, pb);
+            var neededForNewPb = GetRemainingSolvesCount(solves) == 0 ? NA : GetNeededForNewPb(times, pb);
 
             return new SolveCalculations { IncludedSolves = includedSolvesNumbers, CurrentAverage = currentAverage, NeededForNewPB = neededForNewPb };
         }
@@ -66,6 +66,11 @@ namespace TimeCalc.Services
             var needed = (3f * pb) - times[0] - times[1] - (float)neededDiff;
 
             return ConvertSecondsToResult(needed);
+        }
+
+        public int GetRemainingSolvesCount(Solve[] solves)
+        {
+            return solves.Count(s => string.IsNullOrEmpty(s.Result));
         }
 
         public float ConvertResultToSeconds(string input)

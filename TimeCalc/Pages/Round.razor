@@ -20,7 +20,7 @@
         {
             <tr class="@GetInclusionClass(solve.Number)">
                 <td class="align-middle">@solve.Number</td>
-                <td><input class="form-control" type="text" value="@solve.Result"></td>
+                <td><input class="form-control" type="text" value="@solve.Result" @oninput="@(e => SolveInput(e, solve.Number))"></td>
                 <td class="align-middle"><input type="checkbox" value="@solve.IsDNF"></td>
             </tr>
         }
@@ -58,13 +58,27 @@
     private PuzzleRound puzzleRound;
     private SolveCalculations calculations;
     private PersonalBest currentPb;
+    private string currentPbAverage;
 
     protected override async Task OnInitializedAsync()
     {
+        await RefreshData();
+    }
+
+    private async Task RefreshData()
+    {
         puzzleRound = await Store.GetPuzzleRoundAsync(Id);
         currentPb = await GetCurrentPbForPuzzle(puzzleRound.Puzzle);
-        var pbAverage = currentPb == null ? "" : currentPb.Average;
-        calculations = Calculator.GetCalculations(puzzleRound.Solves, pbAverage);
+        currentPbAverage = currentPb == null ? "" : currentPb.Average;
+        calculations = Calculator.GetCalculations(puzzleRound.Solves, currentPbAverage);
+
+        Console.WriteLine($"Needed: {calculations.NeededForNewPB}");
+    }
+
+    private async Task SolveInput(ChangeEventArgs e, int number)
+    {
+        await Store.UpdateSolve(puzzleRound.Id, number, e.Value.ToString());
+        await RefreshData();
     }
 
     private async Task<PersonalBest> GetCurrentPbForPuzzle(string puzzle)
