@@ -30,8 +30,8 @@
     <h5>Averages</h5>
     <div class="form-group">
         <div>
-            <strong>Current:</strong> <span class="@GetCurrentAvgClass()">@calculations.CurrentAverage</span>
-            <strong>For PB:</strong> @calculations.NeededForNewPB
+            <strong>Current:</strong><span class="p-1 @(GetCurrentAvgClass())">@calculations.CurrentAverage</span>
+            <strong>For PB:</strong><span class="p-1">@calculations.NeededForNewPB</span>
         </div>
     </div>
     <h5>PBs</h5>
@@ -39,8 +39,8 @@
         <div>
             @if(currentPb != null)
             {
-                <strong>Single:</strong> @currentPb.Single
-                <strong>Average:</strong> @currentPb.Average
+                <strong>Single:</strong><span class="p-1">@currentPb.Single</span>
+                <strong>Average:</strong><span class="p-1">@currentPb.Average</span>
             }
             else
             {
@@ -115,7 +115,7 @@
             && float.TryParse(currentPbAverage, out currPb)
             && currAvg < currPb)
         {
-            css = "p-1 text-light bg-success";
+            css = "text-light bg-success";
         }
 
         return css;
