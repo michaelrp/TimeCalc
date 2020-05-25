@@ -57,7 +57,8 @@
             iconSpin = "oi-spin";
             errorMessage = "";
 
-            var url = $"sample-data/{wcaId}.json";
+            //var url = $"sample-data/{wcaId}.json";
+            var url = $"https://adaptory-timecalc.azurewebsites.net/api/GetPersonalBestsFromWCA?wcaid={wcaId}";
             var results = await Http.GetFromJsonAsync<PersonalBestResults>(url);
 
             wcaId = results.WcaId.ToUpper();
@@ -71,6 +72,7 @@
         catch (Exception ex)
         {
             errorMessage = ex.Message;
+            Console.WriteLine(ex);
         }
         finally
         {
