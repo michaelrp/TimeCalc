@@ -12,7 +12,7 @@
             @foreach (var best in PersonalBests)
             {
                 <tr>
-                    <td>@best.Puzzle</td>
+                    <td><span class="@CubeIcons.Css(best.Puzzle)"></span> @best.Puzzle</td>
                     <td>@best.Single</td>
                     <td>@best.Average</td>
                 </tr>
