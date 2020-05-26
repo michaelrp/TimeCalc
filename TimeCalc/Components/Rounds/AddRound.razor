@@ -1,7 +1,7 @@
 @if(showAdd)
 {
     <div class="form-row mt-2">
-        <div class="form-group col-4">
+        <div class="form-group col-5">
             <select class="form-control" @bind="newPuzzle">
                 <option value="">Puzzle...</option>
                 @foreach (var puzzle in puzzles)
@@ -10,23 +10,32 @@
                 }
             </select>
         </div>
-        <div class="form-group col-6">
+        <div class="form-group col-7">
             <input text="type" class="form-control" @bind="@newName" placeholder="Name" />
-        </div>
-        <div class="form-group col-2">
-            <button type="button" class="btn btn-success float-right" @onclick="AddPuzzleRound">
-                <span class="oi oi-check"></span>
-            </button>
         </div>
     </div>
 }
 
-<button class="btn btn-primary" type="button" @onclick="() => showAdd = true"><span class="oi oi-plus"></span> Add</button>
+<div class="d-flex justify-content-between">
+    <div class="@(showAdd ? "d-none" : "")">
+        <button class="btn btn-primary" type="button" @onclick="() => showAdd = true"><span class="oi oi-plus"></span> Add</button>
+    </div>
+    <div class="@(showAdd ? "" : "d-none")">
+        <button type="button" class="btn btn-success" @onclick="AddPuzzleRound">
+            <span class="oi oi-check"></span> OK
+        </button>
+    </div>
+    <div class="@(showAdd ? "" : "d-none")">
+        <button type="button" class="btn btn-secondary" @onclick="CancelAdd">
+            <span class="oi oi-x"></span> Cancel
+        </button>
+    </div>
+</div>
 
 @code {
     [Parameter]
     public EventCallback<PuzzleRound> OnPuzzleRoundAdded { get; set; }
-    private string[] puzzles = { "2x2", "3x3", "4x4", "5x5", "6x6", "7x7", "Skewb", "Pyraminx", "Megaminx", "3x3 OH", "3x3 BF", "3x3 Feet", "Square-1" };
+    private string[] puzzles = { "3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Skewb", "Pyraminx", "Megaminx", "3x3 OH", "3x3 BF", "3x3 Feet", "Square-1" };
     bool showAdd = false;
     string newPuzzle = "";
     string newName = "";
@@ -45,8 +54,15 @@
 
         await OnPuzzleRoundAdded.InvokeAsync(pr);
 
-        showAdd = false;
         newPuzzle = "";
-        newName = "";        
+        newName = "";
+        showAdd = false;
+    }
+
+    private void CancelAdd()
+    {
+        newPuzzle = "";
+        newName = "";
+        showAdd = false;
     }
 }

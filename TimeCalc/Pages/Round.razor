@@ -30,14 +30,14 @@
         </tbody>
     </table>
     <hr />
-    <h5>Averages</h5>
+    <h5>@GetAverageLabel()</h5>
     <div class="form-group">
         <div>
             <strong>Current:</strong><span class="p-1 @(GetCurrentAvgClass())">@calculations.CurrentAverage</span>
             <strong>For PB:</strong><span class="p-1">@calculations.NeededForNewPB</span>
         </div>
     </div>
-    <h5>PBs</h5>
+    <h5>PB</h5>
     <div class="form-group">
         <div>
             @if(currentPb != null)
@@ -115,5 +115,19 @@
         }
 
         return css;
+    }
+
+    private string GetAverageLabel()
+    {
+        var label = "Average";
+
+        // Also add 3, 4, 5 blind as mean
+        string[] mean = { "6x6", "7x7", "3BLD", "4BLD", "5BLD" };
+        if(puzzleRound.Puzzle != null &&  mean.Contains(puzzleRound.Puzzle))
+        {
+            label = "Mean";
+        }
+
+        return label;
     }
 }

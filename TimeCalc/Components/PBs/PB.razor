@@ -2,10 +2,6 @@
 
 <div class="form-row">
   <div class="form-group col-4">
-    @* <select class="form-control" [(ngModel)]="pb.puzzle" (change)="onPersonalBestChanged()">
-      <option *ngFor="let puzzle of puzzles" [value]="puzzle">{{ puzzle }}</option>
-    </select> *@
-    @* <input type="text" class="form-control" @oninput="OnPuzzleChanged" value="@PersonalBest.Puzzle" placeholder="Single" /> *@
     <select class="form-control" value="@PersonalBest.Puzzle">
       @foreach (var puzzle in puzzles)
       {

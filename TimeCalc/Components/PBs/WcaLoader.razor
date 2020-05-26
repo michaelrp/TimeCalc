@@ -56,12 +56,11 @@
             isLoading = true;
             iconSpin = "oi-spin";
             errorMessage = "";
+            wcaId = wcaId.ToUpper();
 
-            //var url = $"sample-data/{wcaId}.json";
             var url = $"https://adaptory-timecalc.azurewebsites.net/api/GetPersonalBestsFromWCA?wcaid={wcaId}";
             var results = await Http.GetFromJsonAsync<PersonalBestResults>(url);
 
-            wcaId = results.WcaId.ToUpper();
             wcaInfo.WcaId = results.WcaId;
             wcaInfo.Name = results.Name;
             wcaInfo.AvatarUrl = results.AvatarUrl;
