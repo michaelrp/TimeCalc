@@ -35,7 +35,7 @@
 @code {
     [Parameter]
     public EventCallback<PuzzleRound> OnPuzzleRoundAdded { get; set; }
-    private string[] puzzles = { "3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Skewb", "Pyraminx", "Megaminx", "3x3 OH", "3x3 BF", "3x3 Feet", "Square-1" };
+    private string[] puzzles = { "3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "3BLD", "3x3 FMC", "3x3 OH", "Clock", "Megaminx", "Pyraminx", "Skewb", "Square-1", "4BLD", "5BLD" };
     bool showAdd = false;
     string newPuzzle = "";
     string newName = "";
@@ -43,7 +43,7 @@
     private async Task AddPuzzleRound()
     {
         var id = Guid.NewGuid().ToString("N");
-        string[] shortSolvePuzzles = { "6x6", "7x7", "3x3 BF" };
+        string[] shortSolvePuzzles = { "6x6", "7x7", "3BLD", "4BLD", "5BLD", "3x3 FMC" };
         var solves = new Solve[shortSolvePuzzles.Contains(newPuzzle) ? 3 : 5];
         for(int i = 0; i < solves.Length; i++)
         {
