@@ -11,7 +11,7 @@
         {
             <li class="list-group-item">
                 <NavLink href=@GetRoundHref(puzzleRound.Id) title="View round details" class="text-reset">
-                    <span class="@CubeIcons.Css(puzzleRound.Puzzle)"></span> @puzzleRound.Puzzle - @puzzleRound.Name
+                    <span class="oi oi-chevron-right"></span> <span class="@CubeIcons.Css(puzzleRound.Puzzle)"></span> @puzzleRound.Puzzle - @puzzleRound.Name
                 </NavLink>
                 <div class="float-right" role="button" @onclick="@(e => DeletePuzzleRound(e, puzzleRound.Id))"><span class="oi oi-trash"></span></div>
             </li>
