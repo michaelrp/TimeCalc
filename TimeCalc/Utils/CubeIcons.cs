@@ -26,6 +26,9 @@ namespace TimeCalc.Utils
                 case "7x7":
                     iconCss = "cubing-icon event-777";
                     break;
+                case "3x3 BLD":
+                    iconCss = "cubing-icon event-333bf";
+                    break;
                 case "3x3 OH":
                     iconCss = "cubing-icon event-333oh";
                     break;
@@ -43,6 +46,15 @@ namespace TimeCalc.Utils
                     break;
                 case "Square-1":
                     iconCss = "cubing-icon event-sq1";
+                    break;
+                case "4x4 BLD":
+                    iconCss = "cubing-icon event-444bf";
+                    break;
+                case "5x5 BLD":
+                    iconCss = "cubing-icon event-555bf";
+                    break;
+                case "3x3 MBL":
+                    iconCss = "cubing-icon event-333mbf";
                     break;
             }
 
