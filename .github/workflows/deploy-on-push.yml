@@ -1,0 +1,33 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.300
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal
+    - name: Login to Azure
+      uses: Azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Publish to blob storage
+      uses: Azure/cli@v1.0.0
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az storage blob upload-batch -s $GITHUB_WORKSPACE/TimeCalc/bin/Release/netstandard2.1/publish/wwwroot -d test-web --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }}

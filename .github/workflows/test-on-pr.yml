@@ -1,8 +1,6 @@
 name: .NET Core
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -23,6 +21,3 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
-    - name: Deploy to Azure
-      if: ${{ github.event_name == 'push' }}
-      run: echo This event is a push and should trigger deployment to Azure
