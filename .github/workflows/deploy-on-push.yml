@@ -21,13 +21,12 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
-    - name: Login to Azure
-      uses: Azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Publish to blob storage
-      uses: Azure/cli@v1.0.0
+      uses: Azure/cli@v1
       with:
         azcliversion: latest
-        inlineScript: |
-          az storage blob upload-batch -s $GITHUB_WORKSPACE/TimeCalc/bin/Release/netstandard2.1/publish/wwwroot -d test-web --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }}
+        inlineScript: >
+          az storage blob upload-batch
+          -s $GITHUB_WORKSPACE/TimeCalc/bin/Release/netstandard2.1/publish/wwwroot
+          -d test-web
+          --connection-string ${{ secrets.STORAGE_CONNECTION_STRING }}
