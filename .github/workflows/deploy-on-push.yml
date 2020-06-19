@@ -19,6 +19,8 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
+    - name: Echo dir
+      run: echo $GITHUB_WORKSPACE
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Publish to blob storage
