@@ -24,5 +24,5 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Deploy to Azure
-      if: ${{ gitub.event_name == 'push' }}
+      if: ${{ github.event_name == 'push' }}
       run: echo This event is a push and should trigger deployment to Azure
