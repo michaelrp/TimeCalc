@@ -21,6 +21,8 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Echo dir
       run: echo $GITHUB_WORKSPACE
+    - name: List files
+      run: ls $GITHUB_WORKSPACE/TimeCalc/bin/Release/netstandard2.1
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Publish to blob storage
