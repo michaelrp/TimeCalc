@@ -19,13 +19,11 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
-    - name: Echo dir
-      run: echo $GITHUB_WORKSPACE
-    - name: List files
-      run: ls $GITHUB_WORKSPACE/TimeCalc/bin/Release/netstandard2.1
     - name: Test
       run: dotnet test --no-restore --verbosity normal
-    - name: Publish to blob storage
+    - name: Publish
+      run: dotnet publish .\TimeCalc\TimeCalc.csproj --configuration Release --no-restore
+    - name: Copy to blob storage
       uses: Azure/cli@v1
       with:
         azcliversion: latest
