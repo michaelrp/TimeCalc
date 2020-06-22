@@ -8,18 +8,6 @@ namespace TimeCalc.Tests
 {
     public class SolveCalculatorTests
     {
-        // some sample solve sets from WCA
-        /*
-        8.36		7.71	8.77	7.93	9.89	8.39
-        43.54		42.63	54.83	38.05	39.73	48.26
-        56.62		1:13.91	1:09.15	52.52	48.19	44.33
-        1.90		0.68	1.98	1.99	1.93	1.80
-        1:06.32		1:06.54	1:01.79	1:35.42	1:03.27	1:09.14
-        */
-
-        // [InlineData("0.68", "1.98", "1.99", "1.93", "1.80", "", "", "", 2, 4, 5)]
-        // [InlineData("1:06.54", "1:01.79", "1:35.42", "1:03.27", "1:09.14", "", "", "", 1, 4, 5)]
-
         [Theory]
         [InlineData("54.12", "56.88", "1:00.85", "1:04.97", "1:04.22", "1:21.07", "1:00.65", " - ", 2, 3, 5)]
         public void GetCalculations(string s1, string s2, string s3, string s4, string s5, string pb, 
