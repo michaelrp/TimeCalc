@@ -31,4 +31,4 @@ jobs:
           az storage blob upload-batch
           -s $GITHUB_WORKSPACE/TimeCalc/bin/Release/netstandard2.1/publish/wwwroot
           -d test-web
-          --connection-string ${{ secrets.STORAGE_CONNECTION_STRING }}
+          --connection-string '${{ secrets.STORAGE_CONNECTION_STRING }}'
