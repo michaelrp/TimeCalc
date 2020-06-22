@@ -8,9 +8,27 @@
   <p><button class="btn btn-danger" type="button" @onclick="ClearAllData"><span class="oi oi-warning" title="Clear all data" aria-hidden="true"></span> Clear</button></p>
 </div>
 
+@if(isCleared)
+{
+  <div class="alert alert-success alert-dismissible" role="alert">
+    <strong>Data cleared.</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" @onclick="HideAlert">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+}
+
 @code {
+    bool isCleared = false;
+
     private async Task ClearAllData()
     {
         await Store.ClearAllDataAsync();
+        isCleared = true;
+    }
+
+    private void HideAlert()
+    {
+      isCleared = false;
     }
 }
