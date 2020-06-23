@@ -3,7 +3,7 @@
 
 A handy app to help keep track of speed cubing averages on the fly.
 
-## Things to know
+## Things to Know
 - Blazor WebAssembly
 - Bootstrap, targeted to mobile
 - All data stored on the local device only
