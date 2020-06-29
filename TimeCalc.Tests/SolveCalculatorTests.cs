@@ -64,6 +64,13 @@ namespace TimeCalc.Tests
         }
 
         [Theory]
+        [InlineData("2", 2.0f)]
+        [InlineData("22", 22.0f)]
+        [InlineData("2:", 120.0f)]
+        [InlineData("2:0", 120.0f)]
+        [InlineData("2:01", 121.0f)]
+        [InlineData("2:1", 121.0F)]
+        [InlineData("2:10", 130.0F)]
         [InlineData("9.342", 9.34f)]
         [InlineData(".42", 0.42f)]
         [InlineData("43.10", 43.1f)]

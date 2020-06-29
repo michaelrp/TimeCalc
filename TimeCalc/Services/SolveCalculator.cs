@@ -95,16 +95,27 @@ namespace TimeCalc.Services
             var timeParts = truncated.Split(":");
 
             // convert minutes to seconds and parse to number
-            float converted;
+            float converted = 0.0f;
             if (timeParts.Length == 1)
             {
                 // seconds
-                converted = float.Parse(timeParts[0]);
+                if(timeParts[0].Length > 0)
+                {
+                    converted = float.Parse(timeParts[0]);
+                }
             }
             else
             {
-                // minutes, seconds
-                converted = float.Parse(timeParts[0]) * 60 + float.Parse(timeParts[1]);
+                // minutes
+                if(timeParts[0].Length > 0)
+                {
+                    converted = float.Parse(timeParts[0]) * 60;
+                }
+                // seconds
+                if(timeParts[1].Length > 0)
+                {
+                    converted += float.Parse(timeParts[1]);
+                }
             }
 
             return converted;
