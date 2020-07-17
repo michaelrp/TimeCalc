@@ -1,0 +1,156 @@
+@using System.Timers
+
+<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Solve @solveNumber</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="() => CloseAsync()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <h1 class="display-3">@solveResult</h1>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn @(isRunning ? "btn-danger" : "btn-success")" @onclick="StartStop">
+                        @if(isRunning)
+                        {
+                            <span class="oi oi-media-stop"></span>@(" Stop")
+                        }
+                        else
+                        {
+                            <span class="oi oi-media-play"></span>@(" Start")
+                        }
+                    </button>
+                    <button type="button" class="btn btn-secondary" @onclick="Reset">
+                        <span class="oi oi-reload"></span> Reset
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" disabled="@(isRunning)" data-dismiss="modal" @onclick="() => CloseAsync(true)">Update Solve</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => CloseAsync()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    [Parameter]
+    public EventCallback<Tuple<int, string>> OnSolveUpdated { get; set; }
+    public Guid Guid = Guid.NewGuid();
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop = false;
+    private int solveNumber;
+    private string solveResult;
+    Timer timer;
+    DateTime startTime;
+    TimeSpan savedTime;
+    TimeSpan differenceTime;
+    bool isRunning;
+
+    public void Open(int number, string result)
+    {
+        solveNumber = number;
+        solveResult = string.IsNullOrEmpty(result) ? "0.00" : result;
+
+        isRunning = false;
+        timer = new Timer(10);
+        timer.Elapsed += async (sender, e) => await TimerTick(sender, e);
+        savedTime = GetTimeSpanFromResult(solveResult);
+        differenceTime = new TimeSpan();
+        
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    public async Task CloseAsync(bool update = false)
+    {
+        timer.Stop();
+
+        if(update)
+        {
+            var result = new Tuple<int, string>(solveNumber, solveResult);
+            await OnSolveUpdated.InvokeAsync(result);
+        }
+
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+
+    private TimeSpan GetTimeSpanFromResult(string result)
+    {
+        // This is the default value
+        if(result == "0.00")
+        {
+            return new TimeSpan();
+        }
+
+        var min = 0;
+        var sec = 0;
+        var mil = 0;
+        var secPart = result;
+
+        if(result.Contains(":"))
+        {
+            var minParts = result.Split(":");
+            min = int.Parse(result.Split(":")[0]);
+            secPart = minParts[1];
+        }
+
+        var secParts = secPart.Split(".");
+        sec = int.Parse(secParts[0]);
+        mil = int.Parse(secParts[1]) * 10;
+        
+        return new TimeSpan(0, 0, min, sec, mil);
+    }
+
+    private async Task TimerTick(object sender, ElapsedEventArgs e)
+    {
+        var updatedTime = DateTime.Now;
+        differenceTime = (updatedTime - startTime) + savedTime;
+        var format = differenceTime.Minutes < 1 ? @"%s\.ff" : @"%m\:ss\.ff";
+
+        solveResult = differenceTime.ToString(format);
+
+        this.StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    private void StartStop()
+    {
+        if(isRunning)
+        {
+            timer.Stop();
+            savedTime = differenceTime;
+            isRunning = false;
+        }
+        else
+        {
+            startTime = DateTime.Now;
+            timer.Start();
+            isRunning = true;
+        }
+    }
+
+    private void Reset()
+    {
+        timer.Stop();
+        savedTime = new TimeSpan();
+        differenceTime = new TimeSpan();
+        isRunning = false;
+        solveResult = "0.00";
+    }
+}
