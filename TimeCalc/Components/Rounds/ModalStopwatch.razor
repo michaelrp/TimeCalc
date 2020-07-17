@@ -4,14 +4,14 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Solve @SolveNumber</h5>
+                <h5 class="modal-title">Solve @solveNumber</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="() => CloseAsync()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="text-center">
-                    <h1 class="display-3">@SolveResult</h1>
+                    <h1 class="display-3">@solveResult</h1>
                 </div>
                 <div class="d-flex justify-content-between">
                     <button type="button" class="btn @(isRunning ? "btn-danger" : "btn-success")" @onclick="StartStop">
@@ -49,8 +49,8 @@
     public string ModalDisplay = "none;";
     public string ModalClass = "";
     public bool ShowBackdrop = false;
-    private int SolveNumber;
-    private string SolveResult;
+    private int solveNumber;
+    private string solveResult;
     Timer timer;
     DateTime startTime;
     TimeSpan savedTime;
@@ -59,16 +59,14 @@
 
     public void Open(int number, string result)
     {
-        SolveNumber = number;
-        SolveResult = string.IsNullOrEmpty(result) ? "0.00" : result;
+        solveNumber = number;
+        solveResult = string.IsNullOrEmpty(result) ? "0.00" : result;
 
         isRunning = false;
         timer = new Timer(10);
         timer.Elapsed += async (sender, e) => await TimerTick(sender, e);
-        savedTime = GetTimeSpanFromResult(SolveResult);
+        savedTime = GetTimeSpanFromResult(solveResult);
         differenceTime = new TimeSpan();
-
-        Console.WriteLine($"SavedTime: {savedTime}");
         
         ModalDisplay = "block;";
         ModalClass = "Show";
@@ -82,7 +80,7 @@
 
         if(update)
         {
-            var result = new Tuple<int, string>(SolveNumber, SolveResult);
+            var result = new Tuple<int, string>(solveNumber, solveResult);
             await OnSolveUpdated.InvokeAsync(result);
         }
 
@@ -108,16 +106,13 @@
         if(result.Contains(":"))
         {
             var minParts = result.Split(":");
-            Console.WriteLine(minParts);
             min = int.Parse(result.Split(":")[0]);
             secPart = minParts[1];
         }
 
         var secParts = secPart.Split(".");
-        Console.WriteLine($"{secParts[0]} . {secParts[1]}");
         sec = int.Parse(secParts[0]);
         mil = int.Parse(secParts[1]) * 10;
-
         
         return new TimeSpan(0, 0, min, sec, mil);
     }
@@ -128,7 +123,7 @@
         differenceTime = (updatedTime - startTime) + savedTime;
         var format = differenceTime.Minutes < 1 ? @"%s\.ff" : @"%m\:ss\.ff";
 
-        SolveResult = differenceTime.ToString(format);
+        solveResult = differenceTime.ToString(format);
 
         this.StateHasChanged();
         await Task.CompletedTask;
@@ -156,6 +151,6 @@
         savedTime = new TimeSpan();
         differenceTime = new TimeSpan();
         isRunning = false;
-        SolveResult = "0.00";
+        solveResult = "0.00";
     }
 }
