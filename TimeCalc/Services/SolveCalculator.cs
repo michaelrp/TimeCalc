@@ -7,7 +7,7 @@ namespace TimeCalc.Services
 {
     public class SolveCalculator : ISolveCalculator
     {
-        private const string NA = " - ";
+        public const string NA = " - ";
 
         public SolveCalculations GetCalculations(Solve[] solves, string pb)
         {
@@ -45,7 +45,7 @@ namespace TimeCalc.Services
 
         public string GetNeededForNewPb(float[] times, string currentPb)
         {
-            if(times.Count() < 2)
+            if(times.Count() < 2 || string.IsNullOrEmpty(currentPb))
             {
                 return NA;
             }

@@ -9,7 +9,7 @@ namespace TimeCalc.Tests
     public class SolveCalculatorTests
     {
         [Theory]
-        [InlineData("54.12", "56.88", "1:00.85", "1:04.97", "1:04.22", "1:21.07", "1:00.65", " - ", 2, 3, 5)]
+        [InlineData("54.12", "56.88", "1:00.85", "1:04.97", "1:04.22", "1:21.07", "1:00.65", SolveCalculator.NA, 2, 3, 5)]
         public void GetCalculations(string s1, string s2, string s3, string s4, string s5, string pb, 
             string avg, string needed, params int[] results)
         {
@@ -132,7 +132,7 @@ namespace TimeCalc.Tests
         [InlineData("8.36", 8.77f, 7.93f, 8.39f)]
         [InlineData("43.54", 42.63f, 39.73f, 48.26f)]
         [InlineData("1:06.32", 66.54f, 63.27f, 69.14f)]
-        [InlineData(" - ", 7.86f, 8.01f)]
+        [InlineData(SolveCalculator.NA, 7.86f, 8.01f)]
         public void GetCurrentAverage(string result, params float[] times)
         {
             var calc = new SolveCalculator();
@@ -143,6 +143,7 @@ namespace TimeCalc.Tests
         [Theory]
         [InlineData("24.91", "28.93", 29.36f, 32.5f, 35.85f)]
         [InlineData("7.50", "8.36", 7.3f, 10.26f, 10.33f)]
+        [InlineData(SolveCalculator.NA, "", 7.3f, 10.23f, 9.43f)]
         public void GetNeededForNewPb(string result, string pb, params float[] times)
         {
             var calc = new SolveCalculator();
