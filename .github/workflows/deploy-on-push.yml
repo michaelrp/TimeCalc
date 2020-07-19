@@ -9,9 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # defaults:
-    #   run:
-    #     working-directory: src
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -39,14 +36,3 @@ jobs:
           -s $GITHUB_WORKSPACE/src/TimeCalc/bin/Release/netstandard2.1/publish/wwwroot
           -d \$web
           --connection-string '${{ secrets.STORAGE_CONNECTION_STRING }}'
-
-    - name: Azure service principal login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - name: Purge CDN
-      run:
-        az cdn endpoint purge -n ${{ secrets.AZURE_CDN_ENDPOINT }} --profile-name ${{ secrets.AZURE_CDN_PROFILE_NAME }} --content-paths "/*" --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --no-wait
-    - name: Azure service principal logout
-      run: |
-        az logout
