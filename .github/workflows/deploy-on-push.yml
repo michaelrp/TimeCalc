@@ -36,9 +36,6 @@ jobs:
           -d \$web
           --connection-string '${{ secrets.STORAGE_CONNECTION_STRING }}'
 
-  purge-cdn:
-    runs-on: ubuntu-latest
-    steps:
     - name: Azure service principal login
       uses: azure/login@v1
       with:
