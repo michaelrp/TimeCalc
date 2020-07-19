@@ -9,9 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: src
+    # defaults:
+    #   run:
+    #     working-directory: src
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -19,12 +19,16 @@ jobs:
       with:
         dotnet-version: 3.1.300
     - name: Install dependencies
+      working-directory: ./src
       run: dotnet restore
     - name: Build
+      working-directory: ./src
       run: dotnet build --configuration Release --no-restore
     - name: Test
+      working-directory: ./src
       run: dotnet test --no-restore --verbosity normal
     - name: Publish
+      working-directory: ./src
       run: dotnet publish TimeCalc/TimeCalc.csproj --configuration Release --no-restore
     - name: Copy to blob storage
       uses: Azure/cli@v1
