@@ -38,7 +38,7 @@ jobs:
     - name: Azure service principal login
       uses: azure/login@v1
       with:
-        credentials: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Purge CDN
       run:
         az cdn endpoint purge -n ${{ secrets.AZURE_CDN_ENDPOINT }} --profile-name ${{ secrets.AZURE_CDN_PROFILE_NAME }} --content-paths "/*" --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --no-wait
