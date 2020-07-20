@@ -46,6 +46,10 @@
             <strong>Current:</strong><span class="p-1 @(GetCurrentAvgClass())">@calculations.CurrentAverage</span>
             <strong>For PB:</strong><span class="p-1">@calculations.NeededForNewPB</span>
         </div>
+        <div>
+            <label>@(float.Parse(possibleSolve) / 100)</label>
+            <input type="range" class="custom-range" min="@minRange" max="@maxRange" value="@possibleSolve" @oninput="@(e => WhatIfChanged(e))">
+        </div>
     </div>
     <h5>PB</h5>
     <div class="form-group">
@@ -72,6 +76,9 @@
     private PuzzleRound puzzleRound;
     private SolveCalculations calculations;
     private PersonalBest currentPb;
+    private int minRange = 700;
+    private int maxRange = 1100;
+    private string possibleSolve;
     private string currentPbAverage;
     private string roundTitle;
     private string cubeIcon;
@@ -79,6 +86,8 @@
     protected override async Task OnInitializedAsync()
     {
         await RefreshData();
+        possibleSolve = ((minRange + maxRange) / 2).ToString();
+        Console.WriteLine($"possibleSolve {possibleSolve}");
     }
 
     private async Task RefreshData()
@@ -104,6 +113,12 @@
     private async Task PersistSolve(string roundId, int solveNumber, string solveResult)
     {
         await Store.UpdateSolve(roundId, solveNumber, solveResult);
+        await RefreshData();
+    }
+
+    private async Task WhatIfChanged(ChangeEventArgs e)
+    {
+        possibleSolve = e.Value.ToString();
         await RefreshData();
     }
 
