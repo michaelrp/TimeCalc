@@ -1,0 +1,101 @@
+@inject ISolveCalculator Calculator
+
+<div>
+    <div class="row">
+        <div class="col">
+            <i>To average</i> @rangeValue
+        </div>
+        <div class="col">
+            <i>You need</i> @neededDisplay
+        </div>
+    </div>
+    <div class="d-flex justify-content-between">
+        <div class="pr-2">@minRange</div>
+        <div class="flex-grow-1 align-self-center">
+            <input type="range" class="custom-range" min="@minRange" max="@maxRange" step="0.01" 
+                value="@rangeValue" @oninput="@(e => AverageChanged(e))">
+        </div>
+        <div class="pl-2">@maxRange</div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Solve[] Solves { get; set; }
+    [Parameter]
+    public string BPA { get; set; }
+
+    private float[] solveValues;
+    private float minRange;
+    private float maxRange;
+    private float rangeValue;
+    private string minDisplay;
+    private string maxDisplay;
+    private string valueDisplay;
+    private string neededDisplay;
+
+    protected override void OnInitialized()
+    {
+        solveValues = Calculator.GetConvertedSolves(Solves)
+                                .Select(s => s.Item2).ToArray();
+
+        if(solveValues.Length == 3)
+        {
+            // min is fastest time - 20%
+            var fastest = solveValues[0];
+            // No round for float, so convert to a double and back?
+            minRange = (float)Math.Round((double)(fastest * 0.8f), 2);
+
+            // max is slowest time + 20%
+            var slowest = solveValues[2];
+            maxRange = (float)Math.Round((double)(fastest * 1.2f), 2);
+        }
+        else if(solveValues.Length == 4)
+        {
+            minRange = Calculator.ConvertResultToSeconds(BPA);
+
+            var included = solveValues.Skip(1).Take(3).ToArray();
+            var wpa = Calculator.GetAverage(included);
+            maxRange = Calculator.ConvertResultToSeconds(wpa);
+        }
+        rangeValue = (minRange + maxRange) / 2.0f;
+
+        minDisplay = Calculator.ConvertSecondsToResult(minRange);
+        maxDisplay = Calculator.ConvertSecondsToResult(maxRange);
+        valueDisplay = Calculator.ConvertSecondsToResult(rangeValue);
+        neededDisplay = GetNeededSolve(rangeValue);
+
+        Console.WriteLine($"mD ${minDisplay}, mR ${minRange}, vD ${valueDisplay}, rV ${rangeValue}");
+    }
+
+    private void AverageChanged(ChangeEventArgs e)
+    {
+        rangeValue = float.Parse(e.Value.ToString());
+        valueDisplay = Calculator.ConvertSecondsToResult(rangeValue);
+        neededDisplay = GetNeededSolve(rangeValue);
+    }
+
+    private string GetNeededSolve(float value)
+    {
+        float a;
+        float b;
+
+        if(solveValues.Length == 3)
+        {
+            a = solveValues[0];
+            b = solveValues[1];
+        }
+        else
+        {
+            a = solveValues[1];
+            b = solveValues[2];
+        }
+        var needed = (value * 3f) - a - b;
+        return Calculator.ConvertSecondsToResult(needed);
+    }
+
+    public void Refresh()
+    {
+        StateHasChanged();
+    }
+}

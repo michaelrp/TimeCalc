@@ -133,11 +133,11 @@ namespace TimeCalc.Tests
         [InlineData("43.54", 42.63f, 39.73f, 48.26f)]
         [InlineData("1:06.32", 66.54f, 63.27f, 69.14f)]
         [InlineData(SolveCalculator.NA, 7.86f, 8.01f)]
-        public void GetCurrentAverage(string result, params float[] times)
+        public void GetAverage(string result, params float[] times)
         {
             var calc = new SolveCalculator();
 
-            Assert.Equal(result, calc.GetCurrentAverage(times));
+            Assert.Equal(result, calc.GetAverage(times));
         }
 
         [Theory]

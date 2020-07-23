@@ -13,24 +13,35 @@ namespace TimeCalc.Services
         {
             var includedSolves = GetIncludedSolves(solves);
             var includedSolvesNumbers = includedSolves.Select(s => s.Item1).ToArray();
+            var remainingSolvesCount = GetRemainingSolvesCount(solves);
 
             var times = includedSolves.Select(s => s.Item2).ToArray();
-            var currentAverage = GetCurrentAverage(times);
-            var neededForNewPb = GetRemainingSolvesCount(solves) == 0 ? NA : GetNeededForNewPb(times, pb);
+            var currentAverage = GetAverage(times);
+            var neededForNewPb = remainingSolvesCount == 0 ? NA : GetNeededForNewPb(times, pb);
+            var bpa =  remainingSolvesCount == 0 ? currentAverage : GetBPA(solves, currentAverage);
 
-            return new SolveCalculations { IncludedSolves = includedSolvesNumbers, CurrentAverage = currentAverage, NeededForNewPB = neededForNewPb };
+            return new SolveCalculations { 
+                IncludedSolves = includedSolvesNumbers, 
+                CurrentAverage = currentAverage, 
+                NeededForNewPB = neededForNewPb,
+                BPA = bpa
+            };
+        }
+
+        public IEnumerable<Tuple<int, float>> GetConvertedSolves(Solve[] solves)
+        {
+            return solves.Where(s => !string.IsNullOrEmpty(s.Result))
+                                  .Select(s => new Tuple<int, float>(s.Number, ConvertResultToSeconds(s.Result)))
+                                  .OrderBy(s => s.Item2);
         }
 
         public IEnumerable<Tuple<int, float>> GetIncludedSolves(Solve[] solves)
         {
-            var converted = solves.Where(s => !string.IsNullOrEmpty(s.Result))
-                                  .Select(s => new Tuple<int, float>(s.Number, ConvertResultToSeconds(s.Result)))
-                                  .OrderBy(s => s.Item2);
-
+            var converted = GetConvertedSolves(solves);
             return converted.Count() < 4 ? converted : converted.Skip(1).Take(3);
         }
 
-        public string GetCurrentAverage(float[] times)
+        public string GetAverage(float[] times)
         {
             if(times.Count() < 3)
             {
@@ -66,6 +77,20 @@ namespace TimeCalc.Services
             var needed = (float)Math.Round(multipliedPb - times[0] - times[1] - neededDiff, 2);
 
             return ConvertSecondsToResult(needed);
+        }
+
+        public string GetBPA(Solve[] solves, string currentAverage)
+        {
+            var converted = GetConvertedSolves(solves);
+            if(converted.Count() < 4)
+            {
+                return NA;
+            }
+
+            var included = converted.Select(s => s.Item2).Take(3).ToArray();
+            var bpa = GetAverage(included);
+
+            return bpa;
         }
 
         public int GetRemainingSolvesCount(Solve[] solves)
