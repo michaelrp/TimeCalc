@@ -5,7 +5,7 @@
     <select class="form-control" value="@PersonalBest.Puzzle">
       @foreach (var puzzle in puzzles)
       {
-          <option value="@puzzle">@puzzle</option>
+        <option value="@puzzle">@puzzle</option>
       }
     </select>
   </div>
@@ -18,29 +18,29 @@
 </div>
 
 @code {
-    [Parameter]
-    public PersonalBest PersonalBest { get; set; }
+  [Parameter]
+  public PersonalBest PersonalBest { get; set; }
 
-    [Parameter]
-    public EventCallback<PersonalBest> OnPersonalBestChanged { get; set; }
+  [Parameter]
+  public EventCallback<PersonalBest> OnPersonalBestChanged { get; set; }
 
-    private string[] puzzles = { "2x2", "3x3", "4x4", "5x5", "6x6", "7x7", "Skewb", "Pyraminx", "Megaminx", "3x3 OH", "3x3 BF", "3x3 Feet", "Square-1" };
+  private string[] puzzles = { "2x2", "3x3", "4x4", "5x5", "6x6", "7x7", "Skewb", "Pyraminx", "Megaminx", "3x3 OH", "3x3 BF", "3x3 Feet", "Square-1" };
 
-    private Task OnPuzzleChanged(ChangeEventArgs e)
-    {
-        PersonalBest.Puzzle = e.Value.ToString();
-        return OnPersonalBestChanged.InvokeAsync(PersonalBest);
-    }
+  private async Task OnPuzzleChanged(ChangeEventArgs e)
+  {
+    PersonalBest.Puzzle = e.Value.ToString();
+    await OnPersonalBestChanged.InvokeAsync(PersonalBest);
+  }
 
-    private Task OnSingleChanged(ChangeEventArgs e)
-    {
-        PersonalBest.Single = e.Value.ToString();
-        return OnPersonalBestChanged.InvokeAsync(PersonalBest);
-    }
+  private async Task OnSingleChanged(ChangeEventArgs e)
+  {
+    PersonalBest.Single = e.Value.ToString();
+    await OnPersonalBestChanged.InvokeAsync(PersonalBest);
+  }
 
-    private Task OnAverageChanged(ChangeEventArgs e)
-    {
-        PersonalBest.Average = e.Value.ToString();
-        return OnPersonalBestChanged.InvokeAsync(PersonalBest);
-    }
+  private async Task OnAverageChanged(ChangeEventArgs e)
+  {
+    PersonalBest.Average = e.Value.ToString();
+    await OnPersonalBestChanged.InvokeAsync(PersonalBest);
+  }
 }
