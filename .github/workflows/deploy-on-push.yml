@@ -36,6 +36,6 @@ jobs:
         azcliversion: latest
         inlineScript: >
           az storage blob upload-batch
-          -s $GITHUB_WORKSPACE/src/TimeCalc/bin/Release/netstandard2.1/publish/wwwroot
+          -s $GITHUB_WORKSPACE/src/TimeCalc/bin/Release/net6.0/publish/wwwroot
           -d \$web
           --connection-string '${{ secrets.STORAGE_CONNECTION_STRING }}'
