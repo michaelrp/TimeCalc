@@ -27,7 +27,7 @@
                 <td class="align-middle">@solve.Number</td>
                 <td>
                     <div class="input-group">
-                        <input class="form-control" type="text" value="@solve.Result" @oninput="@(e => SolveInput(e, solve.Number))">
+                        <input class="form-control time-entry" type="text" value="@solve.Result" @oninput="@(e => SolveInput(e, solve.Number))">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button" @onclick="() => Stopwatch.Open(solve.Number, solve.Result)"><span class="oi oi-timer"></span></button>
                         </div>
@@ -93,7 +93,20 @@
 
     private async Task SolveInput(ChangeEventArgs e, int number)
     {
-        await PersistSolve(puzzleRound.Id, number, e.Value.ToString());
+        @* var inputValue = e.Value.ToString(); *@
+
+        var formattedValue = string.Format(new SolveTimeFormatter(), "{0}", e.Value);
+
+        await PersistSolve(puzzleRound.Id, number, formattedValue);
+    }
+
+    private string FormatInput(string input)
+    {
+        var output = string.Format(new SolveTimeFormatter(), "{0}", input);
+
+        Console.WriteLine($"input '{input}' - output '{output}'");
+
+        return output;
     }
 
     private async Task SolveUpdatedHandler(Tuple<int, string> result)
