@@ -11,7 +11,7 @@
         {
             <li class="list-group-item">
                 <NavLink href=@GetRoundHref(puzzleRound.Id) title="View round details" class="text-reset">
-                    <span class="oi oi-chevron-right"></span> <span class="@CubeIcons.Css(puzzleRound.Puzzle)"></span> @puzzleRound.Puzzle - @puzzleRound.Name
+                    <span class="@CubeIcons.Css(puzzleRound.Puzzle)"></span> @GetPuzzleDisplay(puzzleRound)
                 </NavLink>
                 <div class="float-right" role="button" @onclick="@(e => DeletePuzzleRound(e, puzzleRound.Id))"><span class="oi oi-trash"></span></div>
             </li>
@@ -45,6 +45,11 @@ else
         puzzleRounds.Remove(pr);
         await Store.SavePuzzleRounds(puzzleRounds);
     }
+
+    private string GetPuzzleDisplay(PuzzleRound puzzleRound)
+        => string.IsNullOrEmpty(puzzleRound.Name)
+            ? puzzleRound.Puzzle
+            : puzzleRound.Puzzle + " - " + puzzleRound.Name;
 
     private string GetRoundHref(string id) => $"rounds/{id}";
 
