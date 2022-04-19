@@ -39,3 +39,4 @@ jobs:
           -s $GITHUB_WORKSPACE/src/TimeCalc/bin/Release/net6.0/publish/wwwroot
           -d \$web
           --connection-string '${{ secrets.STORAGE_CONNECTION_STRING }}'
+          --overwrite
