@@ -2,22 +2,22 @@
 
 @if(WcaInfo != null)
 {
-    <div class="media mt-1 mb-2">
+    <div class="media mt-1 mb-2 d-flex">
         @if(!string.IsNullOrEmpty(WcaInfo.AvatarUrl))
         {
-            <img class="avatar mr-1 rounded" src="@WcaInfo.AvatarUrl">
+            <img class="avatar me-1 rounded" src="@WcaInfo.AvatarUrl">
         }
         else
         {
-            <img class="avatar mr-1 rounded" src="img/missing_avatar_thumb.png">
+            <img class="avatar me-1 rounded" src="img/missing_avatar_thumb.png">
         }
         @if(!string.IsNullOrEmpty(WcaInfo.Name))
         {
-            <div class="media-body ml-1">
+            <div class="media-body ms-1">
                 <div>
                     <h5 class="mt-0">@WcaInfo.Name</h5>
                 </div>
-                <div><a target="_blank" href="https://www.worldcubeassociation.org/persons/@(WcaInfo.WcaId)">@WcaInfo.WcaId <small><span class="oi oi-external-link"></span></small></a></div>
+                <div><a class="text-decoration-none" target="_blank" href="https://www.worldcubeassociation.org/persons/@(WcaInfo.WcaId)">@WcaInfo.WcaId <small><span class="oi oi-external-link"></span></small></a></div>
             </div>
         }
     </div>
