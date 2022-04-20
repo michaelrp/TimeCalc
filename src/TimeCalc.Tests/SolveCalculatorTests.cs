@@ -141,6 +141,18 @@ namespace TimeCalc.Tests
         }
 
         [Theory]
+        [InlineData("8.29", 7.71f, 8.39f, 8.77f, 9.89f)]
+        [InlineData("40.14", 38.05f, 39.73f, 42.63f, 54.83f)]
+        [InlineData(SolveCalculator.NA, 38.05f, 39.73f, 42.63f)]
+        [InlineData(SolveCalculator.NA, 38.05f, 39.73f, 41.01f, 42.63f, 54.83f)]
+        public void GetBestPossibleAverage(string result, params float[] times)
+        {
+            var calc = new SolveCalculator();
+
+            Assert.Equal(result, calc.GetBestPossibleAverage(times));
+        }
+
+        [Theory]
         [InlineData("24.91", "28.93", 29.36f, 32.5f, 35.85f)]
         [InlineData("7.50", "8.36", 7.3f, 10.26f, 10.33f)]
         [InlineData(SolveCalculator.NA, "", 7.3f, 10.23f, 9.43f)]
