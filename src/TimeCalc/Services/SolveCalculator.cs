@@ -16,23 +16,35 @@ namespace TimeCalc.Services
 
             var times = includedSolves.Select(s => s.Item2).ToArray();
             var currentAverage = GetCurrentAverage(times);
+
+            var bpaTimes = GetConvertedSolves(solves).Select(s => s.Item2).ToArray();
+            var bestPossibleAverage = GetBestPossibleAverage(bpaTimes);
+
             var neededForNewPb = GetRemainingSolvesCount(solves) == 0 ? NA : GetNeededForNewPb(times, pb);
 
-            return new SolveCalculations { IncludedSolves = includedSolvesNumbers, CurrentAverage = currentAverage, NeededForNewPB = neededForNewPb };
+            return new SolveCalculations { 
+                IncludedSolves = includedSolvesNumbers,
+                CurrentAverage = currentAverage,
+                NeededForNewPB = neededForNewPb,
+                BestPossibleAverage = bestPossibleAverage
+            };
         }
 
         public IEnumerable<Tuple<int, float>> GetIncludedSolves(Solve[] solves)
         {
-            var converted = solves.Where(s => !string.IsNullOrEmpty(s.Result))
-                                  .Select(s => new Tuple<int, float>(s.Number, ConvertResultToSeconds(s.Result)))
-                                  .OrderBy(s => s.Item2);
-
+            var converted = GetConvertedSolves(solves);
+            
             return converted.Count() < 4 ? converted : converted.Skip(1).Take(3);
         }
 
+        public IOrderedEnumerable<Tuple<int, float>> GetConvertedSolves(Solve[] solves)
+            => solves.Where(s => !string.IsNullOrEmpty(s.Result))
+                                  .Select(s => new Tuple<int, float>(s.Number, ConvertResultToSeconds(s.Result)))
+                                  .OrderBy(s => s.Item2);
+
         public string GetCurrentAverage(float[] times)
         {
-            if(times.Count() < 3)
+            if (times.Count() < 3)
             {
                 return NA;
             }
@@ -43,9 +55,22 @@ namespace TimeCalc.Services
             return ConvertSecondsToResult((float)avg);
         }
 
+        public string GetBestPossibleAverage(float[] times)
+        {
+            if (times.Count() != 4)
+            {
+                return NA;
+            }
+
+            // include just the three fastest solves
+            var avg = Math.Round((double)(times.Take(3).Average()), 2);
+
+            return ConvertSecondsToResult((float)avg);
+        }
+
         public string GetNeededForNewPb(float[] times, string currentPb)
         {
-            if(times.Count() < 2 || string.IsNullOrEmpty(currentPb))
+            if (times.Count() < 2 || string.IsNullOrEmpty(currentPb))
             {
                 return NA;
             }
@@ -58,7 +83,7 @@ namespace TimeCalc.Services
             // also, floating point math is :( when decimal places matter
             var neededDiff = 0.01d;
             var multipliedPb = Math.Round(3.0d * pb, 2);
-            while(Math.Round(Math.Round(multipliedPb - neededDiff, 2) / 3.0, 2) == roundedPb)
+            while (Math.Round(Math.Round(multipliedPb - neededDiff, 2) / 3.0, 2) == roundedPb)
             {
                 neededDiff = Math.Round(neededDiff + 0.01, 2);
             }
@@ -99,7 +124,7 @@ namespace TimeCalc.Services
             if (timeParts.Length == 1)
             {
                 // seconds
-                if(timeParts[0].Length > 0)
+                if (timeParts[0].Length > 0)
                 {
                     converted = float.Parse(timeParts[0]);
                 }
@@ -107,12 +132,12 @@ namespace TimeCalc.Services
             else
             {
                 // minutes
-                if(timeParts[0].Length > 0)
+                if (timeParts[0].Length > 0)
                 {
                     converted = float.Parse(timeParts[0]) * 60;
                 }
                 // seconds
-                if(timeParts[1].Length > 0)
+                if (timeParts[1].Length > 0)
                 {
                     converted += float.Parse(timeParts[1]);
                 }
