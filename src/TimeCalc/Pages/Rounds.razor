@@ -9,11 +9,11 @@
     <ul class="list-group">
         @foreach (var puzzleRound in puzzleRounds)
         {
-            <li class="list-group-item">
-                <NavLink href=@GetRoundHref(puzzleRound.Id) title="View round details" class="text-reset">
-                    <span class="@CubeIcons.Css(puzzleRound.Puzzle)"></span> @GetPuzzleDisplay(puzzleRound)
+            <li class="list-group-item d-flex">
+                <NavLink href=@GetRoundHref(puzzleRound.Id) title="View round details" class="text-decoration-none text-reset me-auto">
+                    <span class="align-top @CubeIcons.Css(puzzleRound.Puzzle)"></span> @GetPuzzleDisplay(puzzleRound)
                 </NavLink>
-                <div class="float-right" role="button" @onclick="@(e => DeletePuzzleRound(e, puzzleRound.Id))"><span class="oi oi-trash"></span></div>
+                <div role="button" @onclick="@(e => DeletePuzzleRound(e, puzzleRound.Id))"><span class="align-middle oi oi-trash"></span></div>
             </li>
         }
     </ul>
