@@ -3,9 +3,14 @@
 @inject ILocalStorage Store
 @inject ISolveCalculator Calculator
 
-<h4 class="page-header">
-    <NavLink href="rounds" title="Back to rounds" class="text-reset mr-3"><span class="oi oi-chevron-left"></span></NavLink>
-    <span class="@cubeIcon"></span> @roundTitle
+<h4 class="page-header d-flex">
+    <NavLink href="rounds" title="Back to rounds" class="text-decoration-none text-reset me-auto">
+        <span class="oi oi-chevron-left mr-3"></span>
+        <span class="align-top @cubeIcon"></span> @roundTitle
+    </NavLink>
+    <NavLink href="@smsHref" title="Share" class="text-decoration-none text-reset">
+        <span class="oi oi-share"></span>
+    </NavLink>
 </h4>
 
 <ModalStopwatch @ref="Stopwatch" OnSolveUpdated="@SolveUpdatedHandler"></ModalStopwatch>
@@ -76,6 +81,7 @@
     private string currentPbAverage;
     private string roundTitle;
     private string cubeIcon;
+    private string smsHref;
 
     protected override async Task OnInitializedAsync()
     {
@@ -90,12 +96,11 @@
         calculations = Calculator.GetCalculations(puzzleRound.Solves, currentPbAverage);
         roundTitle = $"{puzzleRound.Puzzle} - {puzzleRound.Name}";
         cubeIcon = CubeIcons.Css(puzzleRound.Puzzle);
+        smsHref = GetEncodedBody();
     }
 
     private async Task SolveInput(ChangeEventArgs e, int number)
     {
-        @* var inputValue = e.Value.ToString(); *@
-
         var formattedValue = string.Format(new SolveTimeFormatter(), "{0}", e.Value);
 
         await PersistSolve(puzzleRound.Id, number, formattedValue);
@@ -104,8 +109,6 @@
     private string FormatInput(string input)
     {
         var output = string.Format(new SolveTimeFormatter(), "{0}", input);
-
-        Console.WriteLine($"input '{input}' - output '{output}'");
 
         return output;
     }
@@ -164,5 +167,10 @@
         }
 
         return label;
+    }
+
+    private string GetEncodedBody()
+    {
+        return "sms:&body=" + SolveEncoder.ToUrlEncode(puzzleRound, calculations);
     }
 }
