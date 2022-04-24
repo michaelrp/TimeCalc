@@ -21,11 +21,6 @@ jobs:
     - name: Install dependencies
       working-directory: ./src
       run: dotnet restore
-    - name: Update Version
-      working-directory: ./src
-      run: |
-        echo "Buid version is ${{ github.run_number }}.${{ github.run_attempt }}"
-        sed -i "s/\(<Version>\([0-9]\+\.\)\{2\}\)\([0-9]\+\)/\1${{ github.run_number }}.${{ github.run_attempt }}/" TimeCalc/TimeCalc.csproj
     - name: Build
       working-directory: ./src
       run: dotnet build --configuration Release --no-restore
