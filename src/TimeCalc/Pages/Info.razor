@@ -8,4 +8,9 @@
        won't be able to load PBs from WCA). All of the data entered is
        stored on your device. <NavLink href="clear">Clear</NavLink> your data.</p>
     <p>TimeCalc is maintained on <a href="https://github.com/michaelrp/TimeCalc" target="_blank">GitHub</a>.</p>
+    <p>Version @version</p>
 </div>
+
+@code {
+    Version version = typeof(Program).Assembly.GetName().Version;
+}
