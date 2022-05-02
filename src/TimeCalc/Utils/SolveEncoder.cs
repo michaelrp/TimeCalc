@@ -31,7 +31,7 @@ namespace TimeCalc.Utils
             foreach(var solve in round.Solves)
             {
                 builder.Append(solve.Number);
-                builder.Append(":%20");
+                builder.Append("%20-%20");
                 builder.Append(solve.Result);
                 builder.Append("%0a");
             }
@@ -44,7 +44,7 @@ namespace TimeCalc.Utils
 
             if (hasCurrentAverage)
             {
-                builder.Append("Curr%20");
+                builder.Append("Live%20");
                 builder.Append(calculations.CurrentAverage);
 
                 if (hasNeededForNewPB || hasBPA)
