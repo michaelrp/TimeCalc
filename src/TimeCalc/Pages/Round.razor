@@ -171,6 +171,6 @@
 
     private string GetEncodedBody()
     {
-        return "sms:?&body=" + SolveEncoder.ToUrlEncode(puzzleRound, calculations, currentPb);
+        return "sms:&body=" + SolveEncoder.ToUrlEncode(puzzleRound, calculations, currentPb);
     }
 }
