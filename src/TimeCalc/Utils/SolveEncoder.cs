@@ -9,7 +9,10 @@ namespace TimeCalc.Utils
     {
         private const string NA = " - ";
 
-        public static string ToUrlEncode(PuzzleRound round, SolveCalculations calculations)
+        public static string ToUrlEncode(
+            PuzzleRound round,
+            SolveCalculations calculations,
+            PersonalBest currentPb)
         {
             if (round == null)
             {
@@ -19,7 +22,7 @@ namespace TimeCalc.Utils
             var builder = new StringBuilder();
 
             builder.Append(round.Puzzle);
-            if(!string.IsNullOrEmpty(round.Name))
+            if (!string.IsNullOrEmpty(round.Name))
             {
                 builder.Append("%20");
                 builder.Append(round.Name.Replace(" ", "%20"));
@@ -27,8 +30,8 @@ namespace TimeCalc.Utils
             builder.Append("%0a");
 
             builder.Append("-----%0a");
-            
-            foreach(var solve in round.Solves)
+
+            foreach (var solve in round.Solves)
             {
                 builder.Append(solve.Number);
                 builder.Append("%20-%20");
@@ -68,6 +71,15 @@ namespace TimeCalc.Utils
             {
                 builder.Append("BPA%20");
                 builder.Append(calculations.BestPossibleAverage);
+            }
+
+            if (currentPb != null)
+            {
+                builder.Append("%0a-----%0a");
+                builder.Append("PBs:%20Single%20");
+                builder.Append(currentPb.Single);
+                builder.Append("%20Avg%20");
+                builder.Append(currentPb.Average);
             }
 
             return builder.ToString();
