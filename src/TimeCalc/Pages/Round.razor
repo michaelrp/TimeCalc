@@ -33,9 +33,7 @@
                 <td>
                     <div class="input-group">
                         <input class="form-control time-entry" type="text" pattern="[0-9]*" value="@solve.Result" @oninput="@(e => SolveInput(e, solve.Number))">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" @onclick="() => Stopwatch.Open(solve.Number, solve.Result)"><span class="oi oi-timer"></span></button>
-                        </div>
+                        <button class="btn btn-outline-secondary" type="button" @onclick="() => Stopwatch.Open(solve.Number, solve.Result)" title="Open stopwatch"><span class="oi oi-timer"></span></button>
                     </div>
                 </td>
                 <td class="align-middle"><input type="checkbox" value="@solve.IsDNF"></td>

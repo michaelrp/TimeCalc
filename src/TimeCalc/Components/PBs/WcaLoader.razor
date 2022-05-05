@@ -5,12 +5,10 @@
 <div class="form mt-2">
     <div class="col-12">
         <div class="input-group">
-            <input type="text" class="form-control" value="@wcaId" @oninput="@(e => wcaId = e.Value.ToString().Trim())" placeholder="WCA ID">
-            <div class="input-group-append">
+            <input type="text" class="form-control" value="@wcaId" @oninput="@(e => wcaId = e.Value.ToString().Trim())" aria-label="WCA ID" placeholder="WCA ID">
             <button class="btn btn-primary" type="button" @onclick="LoadFromWca" disabled="@isLoading">
-                <span class="oi oi-reload @iconSpin"></span> Load
+                <span class="oi oi-data-transfer-download"></span> Load
             </button>
-            </div>
         </div>
     </div>
     @if(!string.IsNullOrEmpty(errorMessage))
@@ -31,7 +29,6 @@
     public EventCallback<string> OnWcaLoaded { get; set; }
     private string wcaId;
     private bool isLoading = false;
-    private string iconSpin = "";
     private string errorMessage = "";
 
     public WcaLoader()
@@ -54,7 +51,6 @@
         try
         {
             isLoading = true;
-            iconSpin = "oi-spin";
             errorMessage = "";
             wcaId = wcaId.ToUpper();
 
@@ -75,7 +71,6 @@
         }
         finally
         {
-            iconSpin = "";
             isLoading = false;
         }
 
