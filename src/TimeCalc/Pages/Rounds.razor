@@ -5,19 +5,22 @@
 
 <h4 class="page-header">Rounds</h4>
 
-@if(puzzleRounds != null && puzzleRounds.Count > 0)
+@if (HasRounds())
 {
     <ul class="list-group">
-        @foreach (var puzzleRound in puzzleRounds)
+    @foreach (var puzzleRound in puzzleRounds)
         {
             <li class="list-group-item d-flex">
-                <NavLink href=@GetRoundHref(puzzleRound.Id) title="View round details" class="text-decoration-none text-reset flex-fill d-flex">
+                <NavLink href=@GetRoundHref(puzzleRound.Id) title="View round details"
+                        class="text-decoration-none text-reset flex-fill d-flex">
                     <div class="flex-grow-1">
                         <span class="align-top @CubeIcons.Css(puzzleRound.Puzzle)"></span> @GetPuzzleDisplay(puzzleRound)
                     </div>
-                    <div class="me-3">@GetPuzzleAvg(puzzleRound)</div>
+                    <div>@GetPuzzleAvg(puzzleRound)</div>
                 </NavLink>
-                <div role="button" @onclick="@(e => DeletePuzzleRound(e, puzzleRound.Id))"><span class="oi oi-trash"></span></div>
+                <div role="button" class="ms-3" @onclick="@(e => DeletePuzzleRound(e, puzzleRound.Id))">
+                    <span class="oi oi-trash"></span>
+                </div>
             </li>
         }
     </ul>
@@ -37,11 +40,14 @@ else
     protected override async Task OnInitializedAsync()
     {
         puzzleRounds = await Store.GetPuzzleRoundsAsync();
-        if(puzzleRounds == null)
+        if (puzzleRounds == null)
         {
             puzzleRounds = new List<PuzzleRound>();
         }
     }
+
+    private bool HasRounds()
+    => puzzleRounds != null && puzzleRounds.Count > 0;
 
     private async Task DeletePuzzleRound(MouseEventArgs e, string id)
     {
@@ -51,9 +57,9 @@ else
     }
 
     private string GetPuzzleDisplay(PuzzleRound puzzleRound)
-        => string.IsNullOrEmpty(puzzleRound.Name)
-            ? puzzleRound.Puzzle
-            : puzzleRound.Puzzle + " - " + puzzleRound.Name;
+    => string.IsNullOrEmpty(puzzleRound.Name)
+    ? puzzleRound.Puzzle
+    : puzzleRound.Puzzle + " - " + puzzleRound.Name;
 
     private string GetPuzzleAvg(PuzzleRound puzzleRound)
     {
