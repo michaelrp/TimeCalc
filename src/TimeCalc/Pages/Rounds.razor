@@ -47,7 +47,7 @@ else
     }
 
     private bool HasRounds()
-    => puzzleRounds != null && puzzleRounds.Count > 0;
+        => puzzleRounds != null && puzzleRounds.Count > 0;
 
     private async Task DeletePuzzleRound(MouseEventArgs e, string id)
     {
@@ -57,17 +57,15 @@ else
     }
 
     private string GetPuzzleDisplay(PuzzleRound puzzleRound)
-    => string.IsNullOrEmpty(puzzleRound.Name)
-    ? puzzleRound.Puzzle
-    : puzzleRound.Puzzle + " - " + puzzleRound.Name;
+        => string.IsNullOrEmpty(puzzleRound.Name)
+            ? puzzleRound.Puzzle
+            : puzzleRound.Puzzle + " - " + puzzleRound.Name;
 
     private string GetPuzzleAvg(PuzzleRound puzzleRound)
-    {
-        var avg = Calculator.GetCalculations(puzzleRound.Solves, "").CurrentAverage;
-        return avg;
-    }
+        => Calculator.GetCalculations(puzzleRound.Solves, "").CurrentAverage;
 
-    private string GetRoundHref(string id) => $"rounds/{id}";
+    private string GetRoundHref(string id)
+        => $"rounds/{id}";
 
     private async Task PuzzleRoundAddedHandler(PuzzleRound pr)
     {
