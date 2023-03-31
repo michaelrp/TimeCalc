@@ -1,16 +1,16 @@
-@page "/pbs"
-@using TimeCalc.Components.PBs
+@page "/prs"
+@using TimeCalc.Components.PRs
 @inject ILocalStorage Store
 
-<h4 class="page-header">Personal Bests</h4>
+<h4 class="page-header">Personal Records</h4>
 
 <WcaHeader @bind-WcaInfo="wcaInfo" />
-<PBList @bind-PersonalBests="personalBests" />
+<PRList @bind-PersonalRecords="personalRecords" />
 <WcaLoader OnWcaLoaded="WcaLoadedHandler" />
 
 @code {
     private WcaInfo wcaInfo;
-    private List<PersonalBest> personalBests;
+    private List<PersonalRecord> personalRecords;
 
     protected override async Task OnInitializedAsync()
     {
@@ -20,7 +20,7 @@
     private async Task LoadWcaInfo()
     {
         wcaInfo = await Store.GetWcaInfoAsync();
-        personalBests = await Store.GetPersonalBestsAsync();
+        personalRecords = await Store.GetPersonalRecordsAsync();
     }
     private async Task WcaLoadedHandler(string wcaId)
     {

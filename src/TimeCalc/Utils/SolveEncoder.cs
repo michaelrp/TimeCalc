@@ -12,7 +12,7 @@ namespace TimeCalc.Utils
         public static string ToUrlEncode(
             PuzzleRound round,
             SolveCalculations calculations,
-            PersonalBest currentPb)
+            PersonalRecord currentPr)
         {
             if (round == null)
             {
@@ -42,7 +42,7 @@ namespace TimeCalc.Utils
             builder.Append("-----%0a");
 
             var hasCurrentAverage = calculations.CurrentAverage != NA;
-            var hasNeededForNewPB = calculations.NeededForNewPB != NA;
+            var hasNeededForNewPR = calculations.NeededForNewPr != NA;
             var hasBPA = calculations.BestPossibleAverage != NA;
 
             if (hasCurrentAverage)
@@ -50,16 +50,16 @@ namespace TimeCalc.Utils
                 builder.Append("Live%20");
                 builder.Append(calculations.CurrentAverage);
 
-                if (hasNeededForNewPB || hasBPA)
+                if (hasNeededForNewPR || hasBPA)
                 {
                     builder.Append(",%20");
                 }
             }
 
-            if (hasNeededForNewPB)
+            if (hasNeededForNewPR)
             {
                 builder.Append("For%20PB%20");
-                builder.Append(calculations.NeededForNewPB);
+                builder.Append(calculations.NeededForNewPr);
 
                 if (hasBPA)
                 {
@@ -73,13 +73,13 @@ namespace TimeCalc.Utils
                 builder.Append(calculations.BestPossibleAverage);
             }
 
-            if (currentPb != null)
+            if (currentPr != null)
             {
                 builder.Append("%0a-----%0a");
-                builder.Append("PBs:%20Single%20");
-                builder.Append(currentPb.Single);
+                builder.Append("PRs:%20Single%20");
+                builder.Append(currentPr.Single);
                 builder.Append("%20Avg%20");
-                builder.Append(currentPb.Average);
+                builder.Append(currentPr.Average);
             }
 
             return builder.ToString();

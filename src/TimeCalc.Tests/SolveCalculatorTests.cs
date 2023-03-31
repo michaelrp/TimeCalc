@@ -10,7 +10,7 @@ namespace TimeCalc.Tests
     {
         [Theory]
         [InlineData("54.12", "56.88", "1:00.85", "1:04.97", "1:04.22", "1:21.07", "1:00.65", SolveCalculator.NA, 2, 3, 5)]
-        public void GetCalculations(string s1, string s2, string s3, string s4, string s5, string pb, 
+        public void GetCalculations(string s1, string s2, string s3, string s4, string s5, string pr, 
             string avg, string needed, params int[] results)
         {
             Solve[] solves = {
@@ -22,10 +22,10 @@ namespace TimeCalc.Tests
             };
 
             var calc = new SolveCalculator();
-            var calculations = calc.GetCalculations(solves, pb);
+            var calculations = calc.GetCalculations(solves, pr);
 
             Assert.Equal(avg, calculations.CurrentAverage);
-            Assert.Equal(needed, calculations.NeededForNewPB);
+            Assert.Equal(needed, calculations.NeededForNewPr);
 
             var orderedResults = calc.GetIncludedSolves(solves)
                         .OrderBy(s => s.Item1)
@@ -156,11 +156,11 @@ namespace TimeCalc.Tests
         [InlineData("24.91", "28.93", 29.36f, 32.5f, 35.85f)]
         [InlineData("7.50", "8.36", 7.3f, 10.26f, 10.33f)]
         [InlineData(SolveCalculator.NA, "", 7.3f, 10.23f, 9.43f)]
-        public void GetNeededForNewPb(string result, string pb, params float[] times)
+        public void GetNeededForNewPr(string result, string pr, params float[] times)
         {
             var calc = new SolveCalculator();
 
-            Assert.Equal(result, calc.GetNeededForNewPb(times, pb));
+            Assert.Equal(result, calc.GetNeededForNewPr(times, pr));
         }
     }    
 }

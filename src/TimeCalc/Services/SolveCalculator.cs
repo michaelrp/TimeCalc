@@ -20,12 +20,12 @@ namespace TimeCalc.Services
             var bpaTimes = GetConvertedSolves(solves).Select(s => s.Item2).ToArray();
             var bestPossibleAverage = GetBestPossibleAverage(bpaTimes);
 
-            var neededForNewPb = GetRemainingSolvesCount(solves) == 0 ? NA : GetNeededForNewPb(times, pb);
+            var neededForNewPb = GetRemainingSolvesCount(solves) == 0 ? NA : GetNeededForNewPr(times, pb);
 
             return new SolveCalculations { 
                 IncludedSolves = includedSolvesNumbers,
                 CurrentAverage = currentAverage,
-                NeededForNewPB = neededForNewPb,
+                NeededForNewPr = neededForNewPb,
                 BestPossibleAverage = bestPossibleAverage
             };
         }
@@ -68,27 +68,27 @@ namespace TimeCalc.Services
             return ConvertSecondsToResult((float)avg);
         }
 
-        public string GetNeededForNewPb(float[] times, string currentPb)
+        public string GetNeededForNewPr(float[] times, string currentPr)
         {
-            if (times.Count() < 2 || string.IsNullOrEmpty(currentPb))
+            if (times.Count() < 2 || string.IsNullOrEmpty(currentPr))
             {
                 return NA;
             }
 
-            var pb = ConvertResultToSeconds(currentPb);
-            var roundedPb = Math.Round((double)pb, 2);
+            var pr = ConvertResultToSeconds(currentPr);
+            var roundedPr = Math.Round((double)pr, 2);
 
             // iterate through average calculation and round to find
             // needed difference in a single solve, will be 0.01 - 0.03
             // also, floating point math is :( when decimal places matter
             var neededDiff = 0.01d;
-            var multipliedPb = Math.Round(3.0d * pb, 2);
-            while (Math.Round(Math.Round(multipliedPb - neededDiff, 2) / 3.0, 2) == roundedPb)
+            var multipliedPr = Math.Round(3.0d * pr, 2);
+            while (Math.Round(Math.Round(multipliedPr - neededDiff, 2) / 3.0, 2) == roundedPr)
             {
                 neededDiff = Math.Round(neededDiff + 0.01, 2);
             }
 
-            var needed = (float)Math.Round(multipliedPb - times[0] - times[1] - neededDiff, 2);
+            var needed = (float)Math.Round(multipliedPr - times[0] - times[1] - neededDiff, 2);
 
             return ConvertSecondsToResult(needed);
         }
