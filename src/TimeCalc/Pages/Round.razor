@@ -48,20 +48,20 @@
         <div>
             <strong>Live:</strong><span class="p-1 @(GetCurrentAvgClass())">@calculations.CurrentAverage</span>
             <strong>BPA:</strong><span class="p-1">@calculations.BestPossibleAverage</span>
-            <strong>For PB:</strong><span class="p-1">@calculations.NeededForNewPB</span>
+            <strong>For PR:</strong><span class="p-1">@calculations.NeededForNewPr</span>
         </div>
     </div>
-    <h5 class="mt-3">Current PBs</h5>
+    <h5 class="mt-3">Current PRs</h5>
     <div class="form-group">
         <div>
-            @if(currentPb != null)
+            @if(currentPr != null)
             {
-                <strong>Single:</strong><span class="p-1">@currentPb.Single</span>
-                <strong>Average:</strong><span class="p-1">@currentPb.Average</span>
+                <strong>Single:</strong><span class="p-1">@currentPr.Single</span>
+                <strong>Average:</strong><span class="p-1">@currentPr.Average</span>
             }
             else
             {
-                <div>No personal bests for @puzzleRound.Puzzle</div>
+                <div>No personal records for @puzzleRound.Puzzle</div>
             }
         </div>
     </div>
@@ -75,8 +75,8 @@
     private ModalStopwatch Stopwatch { get; set; }
     private PuzzleRound puzzleRound;
     private SolveCalculations calculations;
-    private PersonalBest currentPb;
-    private string currentPbAverage;
+    private PersonalRecord currentPr;
+    private string currentPrAverage;
     private string roundTitle;
     private string cubeIcon;
     private string smsHref;
@@ -89,9 +89,9 @@
     private async Task RefreshData()
     {
         puzzleRound = await Store.GetPuzzleRoundAsync(Id);
-        currentPb = await GetCurrentPbForPuzzle(puzzleRound.Puzzle);
-        currentPbAverage = currentPb == null ? "" : currentPb.Average;
-        calculations = Calculator.GetCalculations(puzzleRound.Solves, currentPbAverage);
+        currentPr = await GetCurrentPbForPuzzle(puzzleRound.Puzzle);
+        currentPrAverage = currentPr == null ? "" : currentPr.Average;
+        calculations = Calculator.GetCalculations(puzzleRound.Solves, currentPrAverage);
         roundTitle = $"{puzzleRound.Puzzle} - {puzzleRound.Name}";
         cubeIcon = CubeIcons.Css(puzzleRound.Puzzle);
         smsHref = GetEncodedBody();
@@ -122,9 +122,9 @@
         await RefreshData();
     }
 
-    private async Task<PersonalBest> GetCurrentPbForPuzzle(string puzzle)
+    private async Task<PersonalRecord> GetCurrentPbForPuzzle(string puzzle)
     {
-        var pbs = await Store.GetPersonalBestsAsync();
+        var pbs = await Store.GetPersonalRecordsAsync();
         if(pbs == null)
         {
             return null;
@@ -141,11 +141,11 @@
     {
         var css = "";
         var currAvg = 0f;
-        var currPb = 0f;
+        var currPr = 0f;
 
         if(float.TryParse(calculations.CurrentAverage, out currAvg)
-            && float.TryParse(currentPbAverage, out currPb)
-            && currAvg < currPb)
+            && float.TryParse(currentPrAverage, out currPr)
+            && currAvg < currPr)
         {
             css = "text-light bg-success";
         }
@@ -169,6 +169,6 @@
 
     private string GetEncodedBody()
     {
-        return "sms:&body=" + SolveEncoder.ToUrlEncode(puzzleRound, calculations, currentPb);
+        return "sms:&body=" + SolveEncoder.ToUrlEncode(puzzleRound, calculations, currentPr);
     }
 }

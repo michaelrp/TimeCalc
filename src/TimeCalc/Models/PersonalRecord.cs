@@ -1,6 +1,6 @@
 namespace TimeCalc.Models
 {
-    public class PersonalBest
+    public class PersonalRecord
     {
         public string Puzzle { get; set; }
         public string Single { get; set; }

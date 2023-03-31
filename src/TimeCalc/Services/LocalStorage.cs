@@ -19,13 +19,13 @@ namespace TimeCalc.Services
 
         public async Task ClearAllDataAsync()
         {
-            await SavePersonalBestsAsnyc(null);
+            await SavePersonalRecordsAsnyc(null);
             await SavePuzzleRounds(null);
             await SaveWcaInfoAsync(null);
         }
 
-        public async Task<List<PersonalBest>> GetPersonalBestsAsync()
-            => await GetValueAsync<List<PersonalBest>>("pbs");
+        public async Task<List<PersonalRecord>> GetPersonalRecordsAsync()
+            => await GetValueAsync<List<PersonalRecord>>("pbs");
 
         public async Task<PuzzleRound> GetPuzzleRoundAsync(string id)
             => (await GetPuzzleRoundsAsync()).FirstOrDefault(p => p.Id == id);
@@ -36,8 +36,8 @@ namespace TimeCalc.Services
         public async Task<WcaInfo> GetWcaInfoAsync()
             => await GetValueAsync<WcaInfo>("wca");
 
-        public async Task SavePersonalBestsAsnyc(List<PersonalBest> personalBests)
-            => await SetValueAsync<List<PersonalBest>>("pbs", personalBests);
+        public async Task SavePersonalRecordsAsnyc(List<PersonalRecord> personalBests)
+            => await SetValueAsync<List<PersonalRecord>>("pbs", personalBests);
 
         public async Task SavePuzzleRounds(List<PuzzleRound> puzzleRounds)
             => await SetValueAsync<List<PuzzleRound>>("prs", puzzleRounds);
