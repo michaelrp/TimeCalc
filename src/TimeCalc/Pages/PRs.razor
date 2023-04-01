@@ -22,6 +22,7 @@
         wcaInfo = await Store.GetWcaInfoAsync();
         personalRecords = await Store.GetPersonalRecordsAsync();
     }
+    
     private async Task WcaLoadedHandler(string wcaId)
     {
         await LoadWcaInfo();

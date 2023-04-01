@@ -54,7 +54,7 @@
             errorMessage = "";
             wcaId = wcaId.ToUpper();
 
-            var url = $"https://adaptory-timecalc.azurewebsites.net/api/GetPersonalRecordsFromWCA?wcaid={wcaId}";
+            var url = $"https://adaptory-timecalc.azurewebsites.net/api/GetPersonalBestsFromWCA?wcaid={wcaId}";
             var results = await Http.GetFromJsonAsync<PersonalRecordResults>(url);
 
             wcaInfo.WcaId = results.WcaId;
