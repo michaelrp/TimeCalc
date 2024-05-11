@@ -58,7 +58,7 @@ namespace TimeCalc.Utils
 
             if (hasNeededForNewPR)
             {
-                builder.Append("For%20PB%20");
+                builder.Append("For%20PR%20");
                 builder.Append(calculations.NeededForNewPr);
 
                 if (hasBPA)
